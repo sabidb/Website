@@ -1,105 +1,79 @@
-import { Dna, ChevronDown, ArrowRight, Play } from 'lucide-react'
-import './index.css'
+import React from 'react';
+import { Bot, ChevronDown, ArrowRight, Play } from 'lucide-react';
+import './index.css';
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <div className="app-container">
-
-      {/* ── Background Video ── */}
-      <video
-        className="bg-video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-      >
-        <source
-          src="https://strvid.nyc3.cdn.digitaloceanspaces.com/motionsite/dna_video.mp4"
-          type="video/mp4"
-        />
-        Your browser does not support the video tag.
-      </video>
-
-      {/* ── Gradient Overlay ── */}
+      {/* Background Image & Overlay */}
+      <img
+        className="bg-image"
+        src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1920&q=80"
+        alt="Photorealistic 3D Robot Head"
+      />
       <div className="video-overlay" aria-hidden="true" />
 
-      {/* ── Navbar ── */}
-      <nav className="navbar" aria-label="Main navigation">
-
-        {/* Logo */}
-        <a href="/" className="nav-logo" aria-label="Genova Biosciences home">
-          <div className="logo-icon" aria-hidden="true">
-            <Dna size={22} color="#1a56db" strokeWidth={2} />
+      {/* Navigation */}
+      <nav className="navbar">
+        <div className="nav-left">
+          <div className="logo-container">
+            <div className="logo-icon-wrapper">
+              <Bot size={28} className="logo-icon" />
+            </div>
+            <div className="logo-text-stack">
+              <span className="logo-text-primary">DB</span>
+              <span className="logo-text-secondary">ROBOTICS</span>
+            </div>
           </div>
-          <div className="logo-text-stack">
-            <span className="logo-name">Genova</span>
-            <span className="logo-sub">BIOSCIENCES</span>
-          </div>
-        </a>
+        </div>
 
-        {/* Nav Links */}
-        <ul className="nav-links" role="list">
-          <li>
-            <a href="#solutions" className="nav-link">
-              Solutions
-              <ChevronDown size={14} strokeWidth={2.5} aria-hidden="true" />
-            </a>
-          </li>
-          <li><a href="#technology" className="nav-link">Technology</a></li>
-          <li><a href="#research" className="nav-link">Research</a></li>
-          <li><a href="#about" className="nav-link">About Us</a></li>
-          <li><a href="#careers" className="nav-link">Careers</a></li>
-        </ul>
+        <div className="nav-center">
+          <a href="#solutions" className="nav-link">
+            Solutions <ChevronDown size={16} />
+          </a>
+          <a href="#technology" className="nav-link">Technology</a>
+          <a href="#research" className="nav-link">Research</a>
+          <a href="#about" className="nav-link">About Us</a>
+          <a href="#careers" className="nav-link">Careers</a>
+        </div>
 
-        {/* CTA */}
-        <button className="btn btn-primary nav-cta" type="button">
-          Contact Us
-          <ArrowRight size={15} strokeWidth={2.5} aria-hidden="true" />
-        </button>
-
+        <div className="nav-right">
+          <button className="btn btn-primary nav-btn">
+            Contact Us <ArrowRight size={18} />
+          </button>
+        </div>
       </nav>
 
-      {/* ── Hero ── */}
-      <main className="hero" aria-label="Hero section">
-        <div className="hero-content">
+      {/* Main Hero Content */}
+      <main className="hero-content">
+        <div className="chip animate-fade-up" style={{ animationDelay: '0s' }}>
+          <span className="chip-dot" />
+          INNOVATING AI & ROBOTICS
+        </div>
 
-          {/* Chip / Badge */}
-          <div className="chip" role="note">
-            <span className="chip-dot" aria-hidden="true" />
-            INNOVATING LIFE SCIENCES
-          </div>
+        <h1 className="hero-title animate-fade-up" style={{ animationDelay: '0.1s' }}>
+          Advancing AI.<br />
+          <span className="text-highlight">Transforming</span> futures.
+        </h1>
 
-          {/* Headline */}
-          <h1 className="hero-title">
-            Advancing science.<br />
-            <span className="highlight">Transforming</span> lives.
-          </h1>
+        <p className="hero-description animate-fade-up" style={{ animationDelay: '0.2s' }}>
+          DB is at the forefront of artificial intelligence and robotics, developing innovative solutions for a smarter tomorrow.
+        </p>
 
-          {/* Description */}
-          <p className="hero-desc">
-            Genova Biosciences is at the forefront of biotechnology,
-            developing innovative solutions for a healthier tomorrow.
-          </p>
-
-          {/* Action Buttons */}
-          <div className="hero-actions">
-            <button className="btn btn-primary" type="button">
-              Explore Our Solutions
-              <ArrowRight size={16} strokeWidth={2.5} aria-hidden="true" />
-            </button>
-
-            <button className="btn btn-secondary" type="button">
-              <span className="play-icon" aria-hidden="true">
-                <Play size={12} fill="currentColor" strokeWidth={0} />
-              </span>
-              Watch Our Story
-            </button>
-          </div>
-
+        <div className="hero-actions animate-fade-up" style={{ animationDelay: '0.3s' }}>
+          <button className="btn btn-primary btn-lg">
+            Explore Our Solutions <ArrowRight size={20} />
+          </button>
+          <button className="btn btn-secondary btn-lg">
+            <div className="icon-circle">
+              <Play size={16} className="play-icon" fill="currentColor" />
+            </div>
+            Watch Our Story
+          </button>
         </div>
       </main>
-
     </div>
-  )
-}
+  );
+};
+
+export default App;
