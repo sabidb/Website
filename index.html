@@ -6,853 +6,653 @@
   <title>SABI — DB</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #04080F;
       --cyan: #00E5FF;
       --green: #00FF94;
-      --purple: #a855f7;
-      --dim: #2A4055;
+      --dim: #1a3248;
       --text: #E8F4FC;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Grotesk', sans-serif;
-      overflow-x: hidden;
-      cursor: none;
-    }
+    body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; cursor: none; }
     ::-webkit-scrollbar { width: 2px; }
     ::-webkit-scrollbar-thumb { background: var(--cyan); }
 
     /* ── CURSOR ── */
     #cursor {
-      position: fixed; z-index: 9999;
-      width: 12px; height: 12px;
-      background: var(--cyan);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
-      mix-blend-mode: difference;
+      position: fixed; z-index: 9999; width: 10px; height: 10px;
+      background: var(--cyan); border-radius: 50%; pointer-events: none;
+      transform: translate(-50%,-50%); mix-blend-mode: difference;
     }
     #cursor-ring {
-      position: fixed; z-index: 9998;
-      width: 40px; height: 40px;
-      border: 1px solid rgba(0,229,255,0.4);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: transform 0.18s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+      position: fixed; z-index: 9998; width: 36px; height: 36px;
+      border: 1px solid rgba(0,229,255,0.5); border-radius: 50%;
+      pointer-events: none; transform: translate(-50%,-50%);
+      transition: width .3s, height .3s, opacity .3s;
     }
-    body:hover #cursor { opacity: 1; }
 
     /* ── LOADER ── */
     #loader {
       position: fixed; inset: 0; z-index: 9000;
-      background: var(--bg);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 2rem;
+      background: var(--bg); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2rem;
     }
     .ld-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 8rem;
-      line-height: 1;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #00E5FF, #00FF94);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 40px rgba(0,229,255,0.4));
-      animation: ld-pulse 0.8s ease-in-out infinite alternate;
+      font-family: 'Bebas Neue'; font-size: 8rem; line-height: 1;
+      background: linear-gradient(135deg, var(--cyan), var(--green));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(0,229,255,.5));
+      animation: ldp .8s ease-in-out infinite alternate;
     }
-    @keyframes ld-pulse {
-      from { filter: drop-shadow(0 0 20px rgba(0,229,255,0.3)); }
-      to   { filter: drop-shadow(0 0 60px rgba(0,229,255,0.7)); }
-    }
-    .ld-bar { width: 200px; height: 1px; background: rgba(255,255,255,0.06); overflow: hidden; }
-    .ld-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--cyan), var(--green));
-      animation: ld-grow 1.8s cubic-bezier(.4,0,.2,1) forwards 0.3s;
-      width: 0;
-    }
-    @keyframes ld-grow { to { width: 100%; } }
-    .ld-text {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.55rem; letter-spacing: 0.5em;
-      color: var(--dim);
-      animation: blink 1s ease-in-out infinite alternate;
-    }
+    @keyframes ldp { to { filter: drop-shadow(0 0 80px rgba(0,229,255,.9)); } }
+    .ld-bar { width: 200px; height: 1px; background: rgba(255,255,255,.06); overflow: hidden; }
+    .ld-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--green)); animation: ldg 2s cubic-bezier(.4,0,.2,1) forwards .3s; width: 0; }
+    @keyframes ldg { to { width: 100%; } }
+    .ld-msg { font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .5em; color: var(--dim); animation: blink 1s ease-in-out infinite alternate; }
     @keyframes blink { to { color: var(--cyan); } }
 
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 800;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 2rem 3rem;
-      mix-blend-mode: difference;
+      padding: 2rem 3rem; mix-blend-mode: difference;
     }
-    @media (max-width: 600px) { nav { padding: 1.4rem 1.6rem; } }
     .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 0.15em;
-      color: white;
-    }
-    .lang-pill {
-      display: flex; gap: 2px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px; padding: 3px;
-    }
-    .lbtn {
-      background: none; border: none;
-      font-family: 'Orbitron', monospace;
-      font-size: 0.6rem; font-weight: 700;
-      letter-spacing: 0.1em; color: rgba(255,255,255,0.4);
-      padding: 5px 14px; border-radius: 16px; cursor: none;
-      transition: all 0.3s;
-    }
-    .lbtn.on { background: white; color: black; }
-
-    /* ── CANVAS ── */
-    #bg-canvas {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    }
-
-    /* ══════════════════════════════════════════
-       SECTION 1 — HERO
-    ══════════════════════════════════════════ */
-    #s-hero {
-      position: relative; z-index: 1;
-      height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-    }
-
-    /* Giant BG text */
-    .bg-word {
-      position: absolute;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(20vw, 30vw, 32vw);
-      line-height: 0.85;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(0,229,255,0.07);
-      letter-spacing: -0.02em;
-      user-select: none;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-    .bg-word.w1 { top: 5%; left: -2%; }
-    .bg-word.w2 { bottom: 0%; right: -2%; color: transparent; -webkit-text-stroke: 1px rgba(0,255,148,0.06); }
-
-    /* Portrait wrapper */
-    .hero-center {
-      position: relative; z-index: 2;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 2rem;
-    }
-
-    .photo-frame {
-      position: relative;
-      width: clamp(260px, 32vw, 480px);
-      height: clamp(260px, 32vw, 480px);
-      will-change: transform;
-    }
-
-    /* Glow behind photo */
-    .photo-glow {
-      position: absolute; inset: -30px;
-      border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(0,229,255,0.12) 0%, transparent 70%);
-      animation: glow-breathe 4s ease-in-out infinite;
-    }
-    @keyframes glow-breathe {
-      0%,100% { opacity: 0.5; transform: scale(1); }
-      50%      { opacity: 1;   transform: scale(1.08); }
-    }
-
-    /* Rotating orbit ring */
-    .orbit {
-      position: absolute; inset: -18px;
-      border-radius: 50%;
-      border: 1px solid transparent;
-      border-top-color: rgba(0,229,255,0.4);
-      border-right-color: rgba(0,229,255,0.1);
-      animation: orbit-spin 8s linear infinite;
-    }
-    .orbit2 {
-      position: absolute; inset: -34px;
-      border-radius: 50%;
-      border: 1px solid transparent;
-      border-bottom-color: rgba(0,255,148,0.3);
-      border-left-color: rgba(0,255,148,0.08);
-      animation: orbit-spin 14s linear infinite reverse;
-    }
-    @keyframes orbit-spin { to { transform: rotate(360deg); } }
-
-    #portrait-img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center 8%;
-      border-radius: 50%;
-      border: 1px solid rgba(0,229,255,0.2);
-      display: block;
-      background: linear-gradient(135deg, #0A1628, #051020);
-    }
-
-    /* Name */
-    .hero-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 7vw, 6rem);
-      letter-spacing: 0.4em;
-      text-align: center;
-      line-height: 1;
-    }
-    .hero-name .grad {
-      background: linear-gradient(90deg, var(--cyan), var(--green));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-role {
-      font-size: 0.72rem;
-      letter-spacing: 0.5em;
-      color: var(--dim);
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    /* Scroll line */
-    .scroll-line {
-      position: absolute; bottom: 2.5rem; left: 50%;
-      transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-      z-index: 5;
-    }
-    .sl-label {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.5rem; letter-spacing: 0.6em; color: var(--dim);
-      writing-mode: horizontal-tb;
-    }
-    .sl-track {
-      width: 1px; height: 60px;
-      background: linear-gradient(to bottom, transparent, var(--cyan));
-      animation: sl-anim 2s ease-in-out infinite;
-    }
-    @keyframes sl-anim {
-      0%,100% { transform: scaleY(0) translateY(-50%); opacity: 0; }
-      50%      { transform: scaleY(1) translateY(0);    opacity: 1; }
-    }
-
-    /* ══════════════════════════════════════════
-       SECTION 2 — ABOUT / IDENTITY
-    ══════════════════════════════════════════ */
-    #s-about {
-      position: relative; z-index: 1;
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      padding: 8rem 8% 8rem;
-      gap: 6rem;
-      overflow: hidden;
-    }
-    @media (max-width: 900px) {
-      #s-about { grid-template-columns: 1fr; gap: 3rem; padding: 6rem 6%; }
-    }
-
-    .about-left { position: relative; }
-    .section-eye {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.6rem; letter-spacing: 0.5em;
-      color: var(--cyan); text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 1rem;
-    }
-    .section-eye::before {
-      content: '';
-      width: 30px; height: 1px;
-      background: var(--cyan);
-    }
-
-    .about-headline {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3.5rem, 6vw, 6.5rem);
-      line-height: 0.92;
-      letter-spacing: 0.02em;
-      color: white;
-      margin-bottom: 2rem;
-    }
-    .about-headline .accent { color: var(--cyan); }
-
-    .about-body {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: rgba(232,244,252,0.55);
-      max-width: 420px;
-    }
-
-    .about-right {
-      display: flex; flex-direction: column; gap: 1.5rem;
-    }
-    .stat-row {
-      display: flex; align-items: baseline; gap: 1rem;
-      padding: 1.4rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .stat-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3.5rem;
-      line-height: 1;
+      font-family: 'Bebas Neue'; font-size: 2rem; letter-spacing: .05em;
       background: linear-gradient(135deg, var(--cyan), var(--green));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .stat-desc { font-size: 0.85rem; color: rgba(255,255,255,0.4); }
+    .lang-pill { display: flex; gap: .4rem; }
+    .lang-pill button {
+      background: none; border: 1px solid rgba(0,229,255,.25); color: rgba(232,244,252,.4);
+      font-family: 'Orbitron'; font-size: .55rem; letter-spacing: .2em;
+      padding: .35rem .7rem; cursor: none; border-radius: 2px; transition: all .25s;
+    }
+    .lang-pill button.on { background: var(--cyan); color: #000; border-color: var(--cyan); }
 
-    /* ══════════════════════════════════════════
-       SECTION 3 — RESTOPOS  (hero product section)
-    ══════════════════════════════════════════ */
-    #s-restopos {
-      position: relative; z-index: 1;
-      min-height: 100vh;
+    /* ── SKULL SCENE (pinned hero) ── */
+    #skull-scene { position: relative; height: 600vh; }
+    #skull-sticky {
+      position: sticky; top: 0; height: 100vh;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
-      padding: 6rem 6%;
     }
+    #bg-canvas { position: absolute; inset: 0; z-index: 0; }
 
-    .resto-bg-text {
-      position: absolute;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(22vw, 28vw, 30vw);
-      line-height: 1;
-      color: transparent;
-      -webkit-text-stroke: 1px rgba(0,255,148,0.05);
-      letter-spacing: -0.02em;
-      pointer-events: none; user-select: none;
-      white-space: nowrap;
-      left: 50%; transform: translateX(-50%);
-    }
-
-    .resto-content {
+    /* skull wrapper — 3D tilt target */
+    #skull-wrap {
       position: relative; z-index: 2;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: 5rem;
-      width: 100%;
-      max-width: 1200px;
+      display: flex; align-items: center; justify-content: center;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 0 60px rgba(0,229,255,.2));
     }
-    @media (max-width: 900px) {
-      .resto-content { grid-template-columns: 1fr; gap: 3rem; }
+    #skull { width: auto; height: min(68vh, 580px); display: block; }
+
+    /* skull shake keyframe */
+    @keyframes shake {
+      0%,100% { transform: translate(0,0) rotate(0deg); }
+      10% { transform: translate(-4px,2px) rotate(-.5deg); }
+      20% { transform: translate(5px,-3px) rotate(.5deg); }
+      30% { transform: translate(-6px,4px) rotate(-1deg); }
+      40% { transform: translate(4px,-2px) rotate(.8deg); }
+      50% { transform: translate(-3px,5px) rotate(-.6deg); }
+      60% { transform: translate(6px,-4px) rotate(1deg); }
+      70% { transform: translate(-5px,3px) rotate(-.8deg); }
+      80% { transform: translate(3px,-5px) rotate(.5deg); }
+      90% { transform: translate(-4px,2px) rotate(-.4deg); }
+    }
+    #skull-wrap.shaking { animation: shake .08s linear infinite; }
+
+    /* flash overlay */
+    #flash {
+      position: absolute; inset: 0; z-index: 10;
+      background: radial-gradient(ellipse at center, #00E5FF 0%, #ffffff 30%, transparent 70%);
+      opacity: 0; pointer-events: none;
     }
 
-    .resto-left .section-eye { color: var(--green); }
-    .resto-left .section-eye::before { background: var(--green); }
+    /* wire SVG */
+    #wire-svg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      z-index: 3; pointer-events: none; overflow: visible;
+    }
+    .wire {
+      fill: none; stroke-width: 1.5;
+      stroke-linecap: round;
+    }
+    .wire-cyan { stroke: var(--cyan); }
+    .wire-green { stroke: var(--green); }
 
-    .resto-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 7vw, 8rem);
-      line-height: 0.9;
-      letter-spacing: 0.02em;
-      color: white;
-      margin-bottom: 1.5rem;
+    /* service nodes */
+    .node {
+      position: absolute; z-index: 5;
+      opacity: 0; transform: scale(.6);
+      transition: opacity .4s, transform .4s;
+      pointer-events: all; cursor: none;
     }
-    .resto-title span { color: var(--green); }
-
-    .resto-subtitle {
-      font-size: 0.9rem; line-height: 1.7;
-      color: rgba(232,244,252,0.5);
-      margin-bottom: 2.5rem;
-      max-width: 400px;
-    }
-
-    .cta-btn {
-      display: inline-flex; align-items: center; gap: 12px;
-      background: var(--green);
-      color: #000;
-      font-family: 'Orbitron', monospace;
-      font-size: 0.7rem; font-weight: 700;
-      letter-spacing: 0.2em;
-      padding: 1rem 2rem;
-      border: none; border-radius: 4px;
-      cursor: none;
-      transition: all 0.3s;
-      text-transform: uppercase;
-    }
-    .cta-btn:hover {
-      background: #00ffb3;
-      transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(0,255,148,0.3);
-    }
-    .cta-arrow { font-size: 1rem; transition: transform 0.3s; }
-    .cta-btn:hover .cta-arrow { transform: translateX(4px); }
-
-    .resto-right {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .svc-card {
-      background: rgba(0,255,148,0.03);
-      border: 1px solid rgba(0,255,148,0.1);
-      border-radius: 16px;
-      padding: 1.3rem;
-      transition: all 0.4s;
-    }
-    .svc-card:hover {
-      background: rgba(0,255,148,0.08);
-      border-color: rgba(0,255,148,0.3);
-      transform: translateY(-4px);
-    }
-    .svc-card:nth-child(2) { margin-top: 1.5rem; }
-    .svc-card:nth-child(4) { margin-top: 1.5rem; }
-    .svc-ico { font-size: 1.6rem; margin-bottom: 0.7rem; }
-    .svc-nm {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.58rem; font-weight: 700;
-      letter-spacing: 0.15em; color: var(--green);
-      margin-bottom: 0.4rem;
-    }
-    .svc-dc { font-size: 0.7rem; color: rgba(255,255,255,0.35); line-height: 1.5; }
-
-    /* ══════════════════════════════════════════
-       SECTION 4 — PROJECTS
-    ══════════════════════════════════════════ */
-    #s-projects {
-      position: relative; z-index: 1;
-      min-height: 100vh;
-      padding: 8rem 6%;
-      overflow: hidden;
-    }
-
-    .section-header {
-      margin-bottom: 5rem;
-    }
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 6vw, 6rem);
-      letter-spacing: 0.05em;
-      line-height: 1;
-      color: white;
-    }
-    .section-title .accent { color: var(--cyan); }
-
-    .projects-track {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .proj-card {
+    .node.visible { opacity: 1; transform: scale(1); }
+    .node-inner {
+      border: 1px solid rgba(0,229,255,.35);
+      background: rgba(4,8,15,.85);
+      backdrop-filter: blur(8px);
+      padding: .9rem 1.3rem;
+      min-width: 160px;
       position: relative;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 20px;
-      padding: 2rem;
-      cursor: none;
-      transition: all 0.4s;
-      overflow: hidden;
-      text-decoration: none; color: var(--text);
+    }
+    .node-inner::before {
+      content: ''; position: absolute;
+      top: -1px; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+    }
+    .node-label {
+      font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .25em;
+      color: var(--cyan); margin-bottom: .35rem;
+    }
+    .node-title { font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: .06em; line-height: 1; }
+    .node-desc { font-size: .72rem; color: rgba(232,244,252,.5); margin-top: .3rem; line-height: 1.4; }
+    .node-dot {
+      position: absolute; width: 10px; height: 10px;
+      background: var(--cyan); border-radius: 50%;
+      box-shadow: 0 0 16px var(--cyan), 0 0 32px var(--cyan);
+      animation: dotpulse 1.4s ease-in-out infinite;
+    }
+    @keyframes dotpulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(.6); } }
+
+    /* node positions */
+    #n1 { left: 4%; top: 12%; }
+    #n1 .node-dot { right: -14px; top: 50%; transform: translateY(-50%); }
+    #n2 { right: 4%; top: 12%; }
+    #n2 .node-dot { left: -14px; top: 50%; transform: translateY(-50%); }
+    #n3 { right: 3%; top: 50%; transform: translateY(-50%); }
+    #n3 .node-dot { left: -14px; top: 50%; transform: translateY(-50%) translateX(0); }
+    #n4 { right: 8%; bottom: 12%; }
+    #n4 .node-dot { left: -14px; bottom: 40%; }
+    #n5 { left: 4%; bottom: 12%; }
+    #n5 .node-dot { right: -14px; bottom: 40%; }
+
+    /* scroll hint */
+    #scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      z-index: 6; display: flex; flex-direction: column; align-items: center; gap: .6rem;
+      opacity: 1; transition: opacity .4s;
+    }
+    #scroll-hint span { font-family: 'Orbitron'; font-size: .45rem; letter-spacing: .4em; color: rgba(0,229,255,.5); }
+    .sh-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--cyan), transparent); animation: shline 1.8s ease-in-out infinite; }
+    @keyframes shline { 0%,100% { opacity:.4; transform:scaleY(1); } 50% { opacity:1; transform:scaleY(.5) translateY(50%); } }
+
+    /* ── ABOUT ── */
+    #s-about {
+      position: relative; padding: 10rem 8vw;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    .about-eyebrow { font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .5em; color: var(--cyan); margin-bottom: 1.2rem; }
+    .about-headline { font-family: 'Bebas Neue'; font-size: clamp(3.5rem,6vw,6rem); line-height: .95; color: var(--text); }
+    .about-headline em { color: var(--cyan); font-style: normal; }
+    .about-body { font-size: 1.05rem; line-height: 1.75; color: rgba(232,244,252,.6); margin-top: 2rem; }
+    .about-stats { display: flex; flex-direction: column; gap: 3rem; }
+    .stat-item { border-left: 1px solid var(--cyan); padding-left: 1.8rem; }
+    .stat-val { font-family: 'Bebas Neue'; font-size: 3.5rem; line-height: 1; color: var(--cyan); }
+    .stat-lbl { font-size: .75rem; color: rgba(232,244,252,.45); letter-spacing: .1em; margin-top: .3rem; }
+
+    /* ── RESTOPOS SECTION ── */
+    #s-restopos { padding: 8rem 8vw; position: relative; }
+    .section-bg-word {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      font-family: 'Bebas Neue'; font-size: clamp(18vw,24vw,28vw);
+      color: transparent; -webkit-text-stroke: 1px rgba(0,229,255,.05);
+      white-space: nowrap; pointer-events: none; user-select: none; letter-spacing: -.02em;
+    }
+    .resto-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .resto-meta .label { font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .5em; color: var(--cyan); margin-bottom: 1rem; }
+    .resto-title { font-family: 'Bebas Neue'; font-size: clamp(3.5rem,5.5vw,5.5rem); line-height: .95; }
+    .resto-sub { font-size: .95rem; line-height: 1.7; color: rgba(232,244,252,.55); margin-top: 1.5rem; }
+    .cta-btn {
+      display: inline-block; margin-top: 2.5rem;
+      border: 1px solid var(--cyan); color: var(--cyan);
+      font-family: 'Orbitron'; font-size: .55rem; letter-spacing: .3em;
+      padding: 1rem 2.5rem; transition: all .25s; cursor: none;
+      background: transparent; text-decoration: none;
+    }
+    .cta-btn:hover { background: var(--cyan); color: #000; }
+    .svc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(0,229,255,.06); }
+    .svc-card {
+      background: rgba(4,8,15,.9); padding: 1.6rem 1.4rem;
+      border: 1px solid rgba(0,229,255,.04); transition: border-color .2s;
+    }
+    .svc-card:hover { border-color: rgba(0,229,255,.18); }
+    .svc-icon { font-size: 1.4rem; margin-bottom: .8rem; }
+    .svc-name { font-family: 'Orbitron'; font-size: .55rem; letter-spacing: .2em; color: var(--cyan); margin-bottom: .5rem; }
+    .svc-desc { font-size: .8rem; color: rgba(232,244,252,.45); line-height: 1.5; }
+
+    /* ── PROJECTS ── */
+    #s-projects { padding: 8rem 8vw; }
+    .projects-header { margin-bottom: 4rem; }
+    .section-label { font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .5em; color: var(--cyan); margin-bottom: 1rem; }
+    .section-title { font-family: 'Bebas Neue'; font-size: clamp(3rem,5vw,5rem); line-height: .95; }
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .proj-card {
+      border: 1px solid rgba(0,229,255,.1); padding: 2rem;
+      transition: border-color .25s, transform .25s; cursor: none; text-decoration: none; color: inherit;
       display: block;
     }
-    .proj-card::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(0,229,255,0.04), transparent);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .proj-card:hover { border-color: rgba(0,229,255,0.25); transform: translateY(-6px); }
-    .proj-card:hover::before { opacity: 1; }
+    .proj-card:hover { border-color: rgba(0,229,255,.4); transform: translateY(-4px); }
+    .proj-num { font-family: 'Orbitron'; font-size: .45rem; letter-spacing: .3em; color: rgba(0,229,255,.4); margin-bottom: 1rem; }
+    .proj-name { font-family: 'Bebas Neue'; font-size: 1.7rem; line-height: 1; margin-bottom: .8rem; }
+    .proj-desc { font-size: .8rem; color: rgba(232,244,252,.45); line-height: 1.6; }
+    .proj-tag { display: inline-block; margin-top: 1rem; font-size: .65rem; color: var(--green); border: 1px solid rgba(0,255,148,.2); padding: .25rem .7rem; }
 
-    .proj-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.9rem; letter-spacing: 0.3em;
-      color: var(--dim); margin-bottom: 1.5rem;
-    }
-    .proj-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 0.05em;
-      color: white; margin-bottom: 0.5rem;
-      line-height: 1;
-    }
-    .proj-lang {
-      font-size: 0.7rem; color: var(--dim);
-      letter-spacing: 0.2em; text-transform: uppercase;
-      margin-bottom: 1.5rem;
-    }
-    .proj-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: 'Orbitron', monospace;
-      font-size: 0.58rem; font-weight: 700;
-      letter-spacing: 0.2em; color: var(--cyan);
-      text-transform: uppercase;
-      transition: gap 0.3s;
-    }
-    .proj-card:hover .proj-link { gap: 10px; }
-
-    /* ══════════════════════════════════════════
-       SECTION 5 — CONTACT
-    ══════════════════════════════════════════ */
+    /* ── CONTACT ── */
     #s-contact {
-      position: relative; z-index: 1;
-      min-height: 80vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center;
-      padding: 8rem 6%;
-      overflow: hidden;
+      padding: 10rem 8vw; text-align: center;
+      background: radial-gradient(ellipse at 50% 80%, rgba(0,229,255,.04) 0%, transparent 70%);
     }
-
-    .contact-bg {
-      position: absolute; inset: 0; pointer-events: none;
-      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,229,255,0.05) 0%, transparent 70%);
-    }
-
-    .contact-label {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.6rem; letter-spacing: 0.5em;
-      color: var(--cyan); margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 1rem;
-      justify-content: center;
-    }
-    .contact-label::before, .contact-label::after {
-      content: ''; flex: 0 0 30px; height: 1px; background: var(--cyan);
-    }
-
-    .contact-big {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3rem, 8vw, 8rem);
-      letter-spacing: 0.1em;
-      line-height: 0.9;
-      color: white;
-      margin-bottom: 3rem;
-    }
-
-    .social-row {
-      display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
-      margin-bottom: 2rem;
-    }
-    .soc-link {
-      display: flex; align-items: center; gap: 0.9rem;
-      padding: 1rem 2rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 50px;
-      text-decoration: none; color: var(--text);
-      font-size: 0.85rem;
-      transition: all 0.3s;
-      cursor: none;
-    }
-    .soc-link:hover {
-      border-color: var(--cyan);
-      background: rgba(0,229,255,0.06);
-      transform: translateY(-3px);
-    }
-    .soc-ico { font-size: 1.1rem; }
-    .soc-handle { font-size: 0.72rem; color: var(--dim); }
-
-    /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
-      text-align: center; padding: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.03);
-      font-family: 'Orbitron', monospace;
-      font-size: 0.55rem; letter-spacing: 0.4em;
-      color: var(--dim);
-    }
+    .ct-label { font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .5em; color: var(--cyan); margin-bottom: 2rem; }
+    .ct-big { font-family: 'Bebas Neue'; font-size: clamp(5rem,12vw,13rem); line-height: .9; letter-spacing: -.02em; }
+    .ct-links { display: flex; justify-content: center; gap: 4rem; margin-top: 4rem; flex-wrap: wrap; }
+    .ct-link { font-family: 'Orbitron'; font-size: .6rem; letter-spacing: .25em; color: rgba(232,244,252,.4); text-decoration: none; transition: color .25s; cursor: none; }
+    .ct-link:hover { color: var(--cyan); }
+    footer { text-align: center; padding: 2.5rem; font-family: 'Orbitron'; font-size: .45rem; letter-spacing: .35em; color: var(--dim); border-top: 1px solid rgba(0,229,255,.06); }
 
     /* ── MODAL ── */
-    .overlay {
-      position: fixed; inset: 0; z-index: 2000;
-      background: rgba(4,8,15,0.95);
-      backdrop-filter: blur(30px);
+    #overlay {
+      position: fixed; inset: 0; z-index: 2000; background: rgba(4,8,15,.92);
       display: flex; align-items: center; justify-content: center;
-      padding: 2rem;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.4s;
+      opacity: 0; pointer-events: none; transition: opacity .35s;
+      backdrop-filter: blur(8px);
     }
-    .overlay.open { opacity: 1; pointer-events: all; }
-    .modal {
-      width: 100%; max-width: 780px;
-      background: rgba(8,18,32,0.98);
-      border: 1px solid rgba(0,255,148,0.2);
-      border-radius: 24px;
-      padding: clamp(1.5rem, 4vw, 3rem);
-      position: relative;
-      max-height: 90vh; overflow-y: auto;
+    #overlay.open { opacity: 1; pointer-events: all; }
+    #modal {
+      width: min(92vw, 860px); max-height: 88vh; overflow-y: auto;
+      background: #070d18; border: 1px solid rgba(0,229,255,.15);
+      padding: 3rem;
     }
-    .modal::-webkit-scrollbar { width: 2px; }
-    .modal::-webkit-scrollbar-thumb { background: var(--green); }
-    .modal-close {
-      position: absolute; top: 1.2rem; right: 1.2rem;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.4);
-      width: 36px; height: 36px; border-radius: 50%;
-      cursor: none; font-size: 1rem;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.25s;
-    }
-    .modal-close:hover { border-color: var(--green); color: var(--green); }
-    .modal-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      letter-spacing: 0.1em; color: var(--green);
-      margin-bottom: 0.3rem;
-    }
-    .modal-sub {
-      font-size: 0.72rem; letter-spacing: 0.25em;
-      color: var(--dim); text-transform: uppercase;
-      margin-bottom: 2.5rem;
-    }
-    .svc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-    .svc { background: rgba(0,255,148,0.03); border: 1px solid rgba(0,255,148,0.1); border-radius: 14px; padding: 1.2rem; transition: all 0.3s; }
-    .svc:hover { background: rgba(0,255,148,0.08); border-color: rgba(0,255,148,0.3); transform: translateY(-3px); }
-    .svc-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
-    .svc-name { font-family: 'Orbitron', monospace; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; color: var(--green); margin-bottom: 0.4rem; }
-    .svc-desc { font-size: 0.68rem; color: rgba(255,255,255,0.35); line-height: 1.55; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+    .modal-title { font-family: 'Bebas Neue'; font-size: 2.4rem; }
+    .modal-sub { font-size: .8rem; color: rgba(232,244,252,.4); margin-top: .3rem; }
+    .close-btn { background: none; border: 1px solid rgba(0,229,255,.2); color: var(--text); width: 36px; height: 36px; cursor: none; font-size: 1rem; transition: all .2s; }
+    .close-btn:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
+    .svc-modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(0,229,255,.06); }
+    .svc { background: #070d18; padding: 1.6rem; transition: background .2s; }
+    .svc:hover { background: #0a1520; }
+    .svc-icon { font-size: 1.2rem; margin-bottom: .7rem; }
+    .svc-name { font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .2em; color: var(--cyan); margin-bottom: .5rem; }
+    .svc-desc { font-size: .78rem; color: rgba(232,244,252,.4); line-height: 1.5; }
 
-    /* ── REVEAL ANIMATION CLASSES ── */
-    .reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.9s ease, transform 0.9s ease; }
-    .reveal.in { opacity: 1; transform: translateY(0); }
-    .reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.9s ease, transform 0.9s ease; }
-    .reveal-left.in { opacity: 1; transform: translateX(0); }
-    .reveal-right { opacity: 0; transform: translateX(60px); transition: opacity 0.9s ease, transform 0.9s ease; }
-    .reveal-right.in { opacity: 1; transform: translateX(0); }
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-    .delay-4 { transition-delay: 0.4s; }
-    .delay-5 { transition-delay: 0.5s; }
-    .delay-6 { transition-delay: 0.6s; }
+    /* ── REVEALS ── */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity .9s ease, transform .9s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.4rem 1.6rem; }
+      #s-about { grid-template-columns: 1fr; gap: 3rem; padding: 6rem 6vw; }
+      .resto-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .svc-grid { grid-template-columns: 1fr; }
+      #n1,#n2,#n3,#n4,#n5 { display: none; }
+      #wire-svg { display: none; }
+      .svc-modal-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sh-line, .node-dot { animation: none; }
+    }
   </style>
 </head>
 <body>
 
-<!-- Custom cursor -->
+<!-- CURSOR -->
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 
-<!-- Loader -->
+<!-- LOADER -->
 <div id="loader">
   <div class="ld-logo">DB</div>
   <div class="ld-bar"><div class="ld-fill"></div></div>
-  <div class="ld-text" id="ld-msg">INITIALIZING</div>
+  <div class="ld-msg" id="ld-msg">INITIALIZING</div>
 </div>
 
-<!-- Ambient canvas -->
-<canvas id="bg-canvas"></canvas>
-
-<!-- Nav -->
+<!-- NAV -->
 <nav>
   <div class="nav-logo">DB</div>
   <div class="lang-pill">
-    <button class="lbtn on" onclick="setLang('en')" id="btn-en">EN</button>
-    <button class="lbtn"    onclick="setLang('de')" id="btn-de">DE</button>
+    <button id="btn-en" class="on" onclick="setLang('en')">EN</button>
+    <button id="btn-de" onclick="setLang('de')">DE</button>
   </div>
 </nav>
 
-<!-- ══ HERO ══ -->
-<section id="s-hero">
-  <div class="bg-word w1" aria-hidden="true">SA</div>
-  <div class="bg-word w2" aria-hidden="true">BI</div>
+<!-- ══ SKULL SCENE ══ -->
+<div id="skull-scene">
+  <div id="skull-sticky">
+    <canvas id="bg-canvas"></canvas>
 
-  <div class="hero-center">
-    <div class="photo-frame" id="photo-frame">
-      <div class="photo-glow"></div>
-      <div class="orbit"></div>
-      <div class="orbit2"></div>
-      <img id="portrait-img" src="./sabi.png" alt="Sabi">
-    </div>
-    <div>
-      <h1 class="hero-name"><span class="grad" id="h-name">SABI</span></h1>
-      <p class="hero-role" id="h-role">BUILDER · INNOVATOR · DB</p>
-    </div>
-  </div>
+    <!-- SKULL SVG -->
+    <div id="skull-wrap">
+      <svg id="skull" viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="sg" cx="50%" cy="38%" r="62%">
+            <stop offset="0%" stop-color="#1a3a5a"/>
+            <stop offset="55%" stop-color="#0a1828"/>
+            <stop offset="100%" stop-color="#04080F"/>
+          </radialGradient>
+          <radialGradient id="eg-l" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#00E5FF" stop-opacity="1"/>
+            <stop offset="45%" stop-color="#00E5FF" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#00E5FF" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="eg-r" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#00E5FF" stop-opacity="1"/>
+            <stop offset="45%" stop-color="#00E5FF" stop-opacity=".5"/>
+            <stop offset="100%" stop-color="#00E5FF" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="glow-main" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-eye" x="-120%" y="-120%" width="340%" height="340%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="glow-crack" x="-300%" y="-300%" width="700%" height="700%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="f-blur">
+            <feGaussianBlur id="f-blur-v" in="SourceGraphic" stdDeviation="0"/>
+          </filter>
+        </defs>
 
-  <div class="scroll-line">
-    <span class="sl-label" id="sl-lbl">SCROLL</span>
-    <div class="sl-track"></div>
-  </div>
-</section>
+        <!-- ── MAIN BODY ── -->
+        <path id="sk-body"
+          d="M200,32 C270,32 348,86 362,174 L370,224 L360,274 L340,312 L316,344
+             L290,370 L264,392 L200,410 L136,392 L110,370 L84,344 L60,312
+             L40,274 L30,224 L38,174 C52,86 130,32 200,32Z"
+          fill="url(#sg)" stroke="#1a3248" stroke-width="1.5"/>
+
+        <!-- ── PANEL LINES (faceted mechanical look) ── -->
+        <g stroke="#1e3a5c" stroke-width=".8" fill="none">
+          <line x1="200" y1="32" x2="200" y2="122"/>
+          <path d="M148,80 L200,60 L252,80"/>
+          <path d="M124,136 L200,108 L276,136"/>
+          <path d="M38,174 L102,162 L124,136"/>
+          <path d="M362,174 L298,162 L276,136"/>
+          <path d="M52,244 L98,222 L108,196"/>
+          <path d="M348,244 L302,222 L292,196"/>
+          <path d="M60,312 L108,240 L84,202"/>
+          <path d="M340,312 L292,240 L316,202"/>
+          <line x1="60" y1="312" x2="340" y2="312"/>
+          <path d="M80,350 L320,350"/>
+          <path d="M60,312 L70,356 L88,392 L120,416 L160,430 L200,436 L240,430 L280,416 L312,392 L330,356 L340,312"/>
+        </g>
+
+        <!-- ── LEFT EYE ── -->
+        <path d="M86,184 L112,156 L152,149 L184,166 L188,197 L170,228 L138,240 L100,232 L82,212Z" fill="#030609"/>
+        <ellipse cx="136" cy="194" rx="48" ry="40" fill="url(#eg-l)" filter="url(#glow-eye)" opacity=".9" id="eye-l"/>
+        <path d="M86,184 L112,156 L152,149 L184,166 L188,197 L170,228 L138,240 L100,232 L82,212Z"
+          fill="none" stroke="#00E5FF" stroke-width="1" opacity=".6" filter="url(#glow-main)"/>
+
+        <!-- ── RIGHT EYE ── -->
+        <path d="M314,184 L288,156 L248,149 L216,166 L212,197 L230,228 L262,240 L300,232 L318,212Z" fill="#030609"/>
+        <ellipse cx="264" cy="194" rx="48" ry="40" fill="url(#eg-r)" filter="url(#glow-eye)" opacity=".9" id="eye-r"/>
+        <path d="M314,184 L288,156 L248,149 L216,166 L212,197 L230,228 L262,240 L300,232 L318,212Z"
+          fill="none" stroke="#00E5FF" stroke-width="1" opacity=".6" filter="url(#glow-main)"/>
+
+        <!-- ── NASAL VOID ── -->
+        <path d="M183,256 L200,296 L217,256 L200,248Z" fill="#030609"/>
+        <path d="M183,256 L200,296 L217,256 L200,248Z" fill="none" stroke="#1a3248" stroke-width=".8"/>
+
+        <!-- ── CIRCUIT TRACES ── -->
+        <g stroke="#00E5FF" stroke-width=".7" fill="none" opacity=".22" id="circuits">
+          <path d="M146,100 L172,100 L172,90 L228,90 L228,100 L254,100"/>
+          <path d="M122,138 L150,138 L150,128 L250,128 L250,138 L278,138"/>
+          <circle cx="172" cy="100" r="2.5" fill="#00E5FF"/>
+          <circle cx="228" cy="100" r="2.5" fill="#00E5FF"/>
+          <circle cx="150" cy="138" r="2.5" fill="#00E5FF"/>
+          <circle cx="250" cy="138" r="2.5" fill="#00E5FF"/>
+          <path d="M84,210 L68,270 L62,298"/>
+          <path d="M316,210 L332,270 L338,298"/>
+          <path d="M106,232 L116,260 L108,284"/>
+          <path d="M294,232 L284,260 L292,284"/>
+          <path d="M160,410 L160,440 L200,452 L240,440 L240,410"/>
+          <path d="M140,422 L140,445"/>
+          <path d="M260,422 L260,445"/>
+        </g>
+
+        <!-- ── TEETH ── -->
+        <g fill="#c8d8e8" stroke="#0d1f30" stroke-width=".8">
+          <rect x="106" y="328" width="26" height="52" rx="2"/>
+          <rect x="140" y="325" width="26" height="55" rx="2"/>
+          <rect x="174" y="322" width="24" height="58" rx="2"/>
+          <rect x="202" y="322" width="24" height="58" rx="2"/>
+          <rect x="234" y="325" width="26" height="55" rx="2"/>
+          <rect x="268" y="328" width="26" height="52" rx="2"/>
+        </g>
+
+        <!-- ── CRACK LINES (drawn in by scroll, initially hidden) ── -->
+        <g id="cracks" opacity="0" filter="url(#glow-crack)">
+          <path class="ck" d="M138,156 L120,128 L134,100 L124,74"
+            stroke="#00E5FF" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path class="ck" d="M262,156 L280,128 L266,100 L276,74"
+            stroke="#00E5FF" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path class="ck" d="M200,120 L192,148 L208,168 L196,188"
+            stroke="#00FF94" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path class="ck" d="M93,228 L106,255 L96,278 L110,304"
+            stroke="#00E5FF" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path class="ck" d="M307,228 L294,255 L304,278 L290,304"
+            stroke="#00E5FF" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path class="ck" d="M156,370 L148,395 L162,415"
+            stroke="#00FF94" stroke-width="1" fill="none" stroke-linecap="round"/>
+          <path class="ck" d="M244,370 L252,395 L238,415"
+            stroke="#00FF94" stroke-width="1" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <!-- ── OUTER EDGE GLOW ── -->
+        <path
+          d="M200,32 C270,32 348,86 362,174 L370,224 L360,274 L340,312 L316,344
+             L290,370 L264,392 L200,410 L136,392 L110,370 L84,344 L60,312
+             L40,274 L30,224 L38,174 C52,86 130,32 200,32Z"
+          fill="none" stroke="#00E5FF" stroke-width="1.4" opacity=".3"
+          filter="url(#glow-main)" id="sk-edge"/>
+      </svg>
+    </div><!-- /skull-wrap -->
+
+    <!-- FLASH -->
+    <div id="flash"></div>
+
+    <!-- WIRE SVG (full screen, nodes connected by paths) -->
+    <svg id="wire-svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet">
+      <!-- Wires from skull center (960,540) to each node -->
+      <path id="w1" class="wire wire-cyan"
+        d="M960,540 C800,460 580,360 240,190"
+        stroke-dasharray="900" stroke-dashoffset="900"/>
+      <path id="w2" class="wire wire-green"
+        d="M960,540 C1120,460 1340,360 1680,190"
+        stroke-dasharray="900" stroke-dashoffset="900"/>
+      <path id="w3" class="wire wire-cyan"
+        d="M960,540 C1300,540 1560,540 1820,540"
+        stroke-dasharray="900" stroke-dashoffset="900"/>
+      <path id="w4" class="wire wire-green"
+        d="M960,540 C1180,680 1380,820 1560,880"
+        stroke-dasharray="900" stroke-dashoffset="900"/>
+      <path id="w5" class="wire wire-cyan"
+        d="M960,540 C740,680 540,820 280,880"
+        stroke-dasharray="900" stroke-dashoffset="900"/>
+    </svg>
+
+    <!-- SERVICE NODES -->
+    <div class="node" id="n1">
+      <div class="node-dot"></div>
+      <div class="node-inner">
+        <div class="node-label">MAIN PROJECT</div>
+        <div class="node-title">RESTOPOS</div>
+        <div class="node-desc">Saudi-compliant<br>restaurant OS</div>
+      </div>
+    </div>
+
+    <div class="node" id="n2">
+      <div class="node-dot"></div>
+      <div class="node-inner">
+        <div class="node-label">COMPLIANCE</div>
+        <div class="node-title">ZATCA</div>
+        <div class="node-desc">Phase 2 e-invoicing<br>fully integrated</div>
+      </div>
+    </div>
+
+    <div class="node" id="n3">
+      <div class="node-dot"></div>
+      <div class="node-inner">
+        <div class="node-label">PLATFORM</div>
+        <div class="node-title">CROSS-PLATFORM</div>
+        <div class="node-desc">iOS · Android<br>Windows unified</div>
+      </div>
+    </div>
+
+    <div class="node" id="n4">
+      <div class="node-dot"></div>
+      <div class="node-inner">
+        <div class="node-label">INTELLIGENCE</div>
+        <div class="node-title">ANALYTICS</div>
+        <div class="node-desc">Revenue · Peaks<br>Forecasting</div>
+      </div>
+    </div>
+
+    <div class="node" id="n5">
+      <div class="node-dot"></div>
+      <div class="node-inner">
+        <div class="node-label">CONTACT</div>
+        <div class="node-title">HEIS.SABI</div>
+        <div class="node-desc">sabiidb7@gmail.com<br>Instagram · GitHub</div>
+      </div>
+    </div>
+
+    <!-- SCROLL HINT -->
+    <div id="scroll-hint">
+      <span id="sl-lbl">SCROLL</span>
+      <div class="sh-line"></div>
+    </div>
+
+  </div><!-- /skull-sticky -->
+</div><!-- /skull-scene -->
 
 <!-- ══ ABOUT ══ -->
 <section id="s-about">
-  <div class="about-left">
-    <div class="section-eye reveal">IDENTITY</div>
-    <h2 class="about-headline reveal delay-1">
-      THE<br><span class="accent">MIND</span><br>BEHIND DB
-    </h2>
-    <p class="about-body reveal delay-2" id="about-body">
-      Builder, innovator, and founder of DB — a personal brand pushing the limits of what technology can create. Based in Saudi Arabia, shipping products that matter.
-    </p>
+  <div class="about-text reveal">
+    <div class="about-eyebrow">ABOUT DB</div>
+    <h2 class="about-headline">BUILDER.<br><em>INNOVATOR.</em><br>FOUNDER.</h2>
+    <p class="about-body" id="about-body">Builder, innovator, and founder of DB — a personal brand pushing the limits of what technology can create. Based in Saudi Arabia, shipping products that matter.</p>
   </div>
-  <div class="about-right">
-    <div class="stat-row reveal delay-1">
-      <span class="stat-num">01</span>
-      <span class="stat-desc" id="st1">Restopos — Saudi-Compliant POS System</span>
+  <div class="about-stats reveal">
+    <div class="stat-item">
+      <div class="stat-val">01</div>
+      <div class="stat-lbl" id="st1">Restopos — Saudi-Compliant POS System</div>
     </div>
-    <div class="stat-row reveal delay-2">
-      <span class="stat-num">05</span>
-      <span class="stat-desc" id="st2">Active GitHub projects shipping right now</span>
+    <div class="stat-item">
+      <div class="stat-val">05</div>
+      <div class="stat-lbl" id="st2">Active GitHub projects shipping right now</div>
     </div>
-    <div class="stat-row reveal delay-3">
-      <span class="stat-num">∞</span>
-      <span class="stat-desc" id="st3">Ideas queued. Systems building.</span>
+    <div class="stat-item">
+      <div class="stat-val">∞</div>
+      <div class="stat-lbl" id="st3">Ideas queued. Systems building.</div>
     </div>
   </div>
 </section>
 
 <!-- ══ RESTOPOS ══ -->
 <section id="s-restopos">
-  <div class="resto-bg-text" aria-hidden="true">POS</div>
-  <div class="resto-content">
-    <div class="resto-left">
-      <div class="section-eye reveal">FLAGSHIP PRODUCT</div>
-      <h2 class="resto-title reveal delay-1">
-        RESTO<br><span>POS</span>
-      </h2>
-      <p class="resto-subtitle reveal delay-2" id="resto-sub">
-        The complete restaurant management system built for Saudi Arabia. ZATCA-compliant, Arabic-first, and built to handle real operations at scale.
-      </p>
-      <div class="reveal delay-3">
-        <button class="cta-btn" onclick="openModal()">
-          <span id="cta-lbl">EXPLORE SYSTEM</span>
-          <span class="cta-arrow">→</span>
-        </button>
-      </div>
+  <div class="section-bg-word">POS</div>
+  <div class="resto-inner">
+    <div class="resto-meta reveal">
+      <div class="label">FLAGSHIP PRODUCT</div>
+      <h2 class="resto-title">RESTOPOS</h2>
+      <p class="resto-sub" id="resto-sub">The complete restaurant management system built for Saudi Arabia. ZATCA-compliant, Arabic-first, built to handle real operations at scale.</p>
+      <button class="cta-btn" id="cta-lbl" onclick="openModal()">EXPLORE SYSTEM</button>
     </div>
-    <div class="resto-right">
-      <div class="svc-card reveal delay-1">
-        <div class="svc-ico">🇸🇦</div>
-        <div class="svc-nm">ZATCA READY</div>
-        <div class="svc-dc">Phase 1 & 2 Saudi tax authority integration</div>
-      </div>
-      <div class="svc-card reveal delay-2">
-        <div class="svc-ico">🖥️</div>
-        <div class="svc-nm">POS CORE</div>
-        <div class="svc-dc">Arabic-first point of sale, blazing fast</div>
-      </div>
-      <div class="svc-card reveal delay-3">
-        <div class="svc-ico">📊</div>
-        <div class="svc-nm">ANALYTICS</div>
-        <div class="svc-dc">Revenue insights and sales forecasting</div>
-      </div>
-      <div class="svc-card reveal delay-4">
-        <div class="svc-ico">📱</div>
-        <div class="svc-nm">CROSS-PLATFORM</div>
-        <div class="svc-dc">iOS, Android, and Windows — one codebase</div>
-      </div>
+    <div class="svc-grid reveal">
+      <div class="svc-card"><div class="svc-icon">🧾</div><div class="svc-name">ZATCA COMPLIANCE</div><div class="svc-desc">Phase 1 & 2 e-invoicing, QR-ready receipts</div></div>
+      <div class="svc-card"><div class="svc-icon">🖥️</div><div class="svc-name">POS SYSTEM</div><div class="svc-desc">Fast, offline-capable, Arabic/English interface</div></div>
+      <div class="svc-card"><div class="svc-icon">📋</div><div class="svc-name">MENU MANAGEMENT</div><div class="svc-desc">Dynamic menus, real-time pricing & availability</div></div>
+      <div class="svc-card"><div class="svc-icon">📊</div><div class="svc-name">ANALYTICS</div><div class="svc-desc">Revenue insights, peak hours, sales forecasting</div></div>
     </div>
   </div>
 </section>
 
 <!-- ══ PROJECTS ══ -->
 <section id="s-projects">
-  <div class="section-header">
-    <div class="section-eye reveal">GITHUB</div>
-    <h2 class="section-title reveal delay-1">ACTIVE <span class="accent">BUILDS</span></h2>
+  <div class="projects-header reveal">
+    <div class="section-label">OPEN SOURCE</div>
+    <h2 class="section-title">GITHUB PROJECTS</h2>
   </div>
-  <div class="projects-track">
-    <a class="proj-card reveal delay-1" href="https://github.com/sabidb/restopos-zatca-updated" target="_blank">
-      <div class="proj-num">001</div>
+  <div class="proj-grid">
+    <a href="https://github.com/sabidb/restopos-zatca-updated" target="_blank" class="proj-card reveal">
+      <div class="proj-num">01</div>
       <div class="proj-name">RESTOPOS ZATCA</div>
-      <div class="proj-lang">JavaScript</div>
-      <div class="proj-link">VIEW PROJECT →</div>
+      <div class="proj-desc">ZATCA Phase 2 compliant e-invoicing integration for Saudi restaurants</div>
+      <span class="proj-tag">JavaScript</span>
     </a>
-    <a class="proj-card reveal delay-2" href="https://github.com/sabidb/broast-albahr" target="_blank">
-      <div class="proj-num">002</div>
-      <div class="proj-name">BROAST AL-BAHR</div>
-      <div class="proj-lang">HTML</div>
-      <div class="proj-link">VIEW PROJECT →</div>
+    <a href="https://github.com/sabidb/broast-albahr" target="_blank" class="proj-card reveal">
+      <div class="proj-num">02</div>
+      <div class="proj-name">BROAST AL BAHR</div>
+      <div class="proj-desc">Restaurant operations system for Broast Al Bahr chain</div>
+      <span class="proj-tag">JavaScript</span>
     </a>
-    <a class="proj-card reveal delay-3" href="https://github.com/sabidb/Class12-mathAI-" target="_blank">
-      <div class="proj-num">003</div>
-      <div class="proj-name">CLASS 12 MATH AI</div>
-      <div class="proj-lang">HTML · AI</div>
-      <div class="proj-link">VIEW PROJECT →</div>
+    <a href="https://github.com/sabidb/Class12-mathAI-" target="_blank" class="proj-card reveal">
+      <div class="proj-num">03</div>
+      <div class="proj-name">MATH AI</div>
+      <div class="proj-desc">AI-powered mathematics solver for Class 12 curriculum</div>
+      <span class="proj-tag">AI · Education</span>
     </a>
-    <a class="proj-card reveal delay-4" href="https://github.com/sabidb/Al-bahr-admin" target="_blank">
-      <div class="proj-num">004</div>
-      <div class="proj-name">AL-BAHR ADMIN</div>
-      <div class="proj-lang">HTML</div>
-      <div class="proj-link">VIEW PROJECT →</div>
+    <a href="https://github.com/sabidb/Al-bahr-admin" target="_blank" class="proj-card reveal">
+      <div class="proj-num">04</div>
+      <div class="proj-name">AL BAHR ADMIN</div>
+      <div class="proj-desc">Admin panel and management dashboard for Al Bahr operations</div>
+      <span class="proj-tag">Dashboard</span>
     </a>
-    <a class="proj-card reveal delay-5" href="https://github.com/sabidb/baloot-almamlaka-latest" target="_blank">
-      <div class="proj-num">005</div>
-      <div class="proj-name">BALOOT AL-MAMLAKA</div>
-      <div class="proj-lang">JavaScript</div>
-      <div class="proj-link">VIEW PROJECT →</div>
+    <a href="https://github.com/sabidb/baloot-almamlaka-latest" target="_blank" class="proj-card reveal">
+      <div class="proj-num">05</div>
+      <div class="proj-name">BALOOT AL MAMLAKA</div>
+      <div class="proj-desc">Digital version of the classic Saudi card game Baloot</div>
+      <span class="proj-tag">Game · Arabic</span>
     </a>
-    <div class="proj-card reveal delay-6" style="border-style:dashed; cursor:default; opacity:0.35;">
-      <div class="proj-num">00+</div>
-      <div class="proj-name">MORE COMING</div>
-      <div class="proj-lang">ALWAYS BUILDING</div>
+    <div class="proj-card reveal" style="border-style:dashed;opacity:.35;pointer-events:none;">
+      <div class="proj-num">06</div>
+      <div class="proj-name">COMING SOON</div>
+      <div class="proj-desc">Next system in development</div>
     </div>
   </div>
 </section>
 
 <!-- ══ CONTACT ══ -->
 <section id="s-contact">
-  <div class="contact-bg"></div>
-  <div class="contact-label reveal" id="ct-lbl">LET'S BUILD SOMETHING</div>
-  <h2 class="contact-big reveal delay-1" id="ct-big">GET IN<br>TOUCH</h2>
-  <div class="social-row">
-    <a class="soc-link reveal delay-2" href="https://instagram.com/heis.sabi" target="_blank">
-      <span class="soc-ico">📸</span>
-      <div>
-        <div>Instagram</div>
-        <div class="soc-handle">@heis.sabi</div>
-      </div>
-    </a>
-    <a class="soc-link reveal delay-3" href="mailto:sabiidb7@gmail.com">
-      <span class="soc-ico">✉️</span>
-      <div>
-        <div>Email</div>
-        <div class="soc-handle">sabiidb7@gmail.com</div>
-      </div>
-    </a>
-    <a class="soc-link reveal delay-4" href="https://github.com/sabidb" target="_blank">
-      <span class="soc-ico">⚡</span>
-      <div>
-        <div>GitHub</div>
-        <div class="soc-handle">sabidb</div>
-      </div>
-    </a>
+  <div class="ct-label" id="ct-lbl">LET'S BUILD SOMETHING</div>
+  <div class="ct-big" id="ct-big">GET IN<br>TOUCH</div>
+  <div class="ct-links">
+    <a href="https://instagram.com/heis.sabi" target="_blank" class="ct-link">@HEIS.SABI</a>
+    <a href="mailto:sabiidb7@gmail.com" class="ct-link">SABIIDB7@GMAIL.COM</a>
+    <a href="https://github.com/sabidb" target="_blank" class="ct-link">GITHUB/SABIDB</a>
   </div>
 </section>
 
 <footer id="ft">© 2026 SABI · DB · ALL SYSTEMS ACTIVE</footer>
 
 <!-- ══ RESTOPOS MODAL ══ -->
-<div class="overlay" id="overlay" onclick="overlayClick(event)">
-  <div class="modal" id="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title">RESTOPOS</div>
-    <div class="modal-sub" id="mod-sub">Saudi-Compliant Restaurant Management System</div>
-    <div class="svc-grid">
-      <div class="svc"><div class="svc-icon">🇸🇦</div><div class="svc-name">ZATCA COMPLIANCE</div><div class="svc-desc">Full Saudi tax authority e-invoicing, Phase 1 & 2 ready</div></div>
-      <div class="svc"><div class="svc-icon">🖥️</div><div class="svc-name">POS SYSTEM</div><div class="svc-desc">Fast Arabic-first point-of-sale for dine-in & delivery</div></div>
-      <div class="svc"><div class="svc-icon">📋</div><div class="svc-name">MENU MANAGEMENT</div><div class="svc-desc">Dynamic menus, real-time pricing and availability</div></div>
-      <div class="svc"><div class="svc-icon">📊</div><div class="svc-name">ANALYTICS</div><div class="svc-desc">Revenue insights, peak hours, sales forecasting</div></div>
-      <div class="svc"><div class="svc-icon">👥</div><div class="svc-name">STAFF & SHIFTS</div><div class="svc-desc">Role-based access, shift scheduling, permissions</div></div>
-      <div class="svc"><div class="svc-icon">📱</div><div class="svc-name">MOBILE & DESKTOP</div><div class="svc-desc">iOS, Android, Windows — one unified system</div></div>
-      <div class="svc"><div class="svc-icon">🍳</div><div class="svc-name">KITCHEN DISPLAY</div><div class="svc-desc">Real-time order queue for kitchen operations</div></div>
-      <div class="svc"><div class="svc-icon">🔗</div><div class="svc-name">DELIVERY PLATFORMS</div><div class="svc-desc">Hungerstation, Jahez, Mrsool integrated</div></div>
+<div id="overlay" onclick="overlayClick(event)">
+  <div id="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">RESTOPOS</div>
+        <div class="modal-sub" id="mod-sub">Saudi-Compliant Restaurant Management System</div>
+      </div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="svc-modal-grid">
+      <div class="svc"><div class="svc-icon">🧾</div><div class="svc-name">ZATCA COMPLIANCE</div><div class="svc-desc">Phase 1 & 2 e-invoicing, QR-ready receipts for Saudi regulations</div></div>
+      <div class="svc"><div class="svc-icon">🖥️</div><div class="svc-name">POS SYSTEM</div><div class="svc-desc">Fast, offline-capable point-of-sale with Arabic/English interface</div></div>
+      <div class="svc"><div class="svc-icon">📋</div><div class="svc-name">MENU MANAGEMENT</div><div class="svc-desc">Dynamic menus, real-time pricing and availability control</div></div>
+      <div class="svc"><div class="svc-icon">📊</div><div class="svc-name">ANALYTICS</div><div class="svc-desc">Revenue insights, peak hours analysis, sales forecasting</div></div>
+      <div class="svc"><div class="svc-icon">👥</div><div class="svc-name">STAFF & SHIFTS</div><div class="svc-desc">Role-based access, shift scheduling, staff permissions</div></div>
+      <div class="svc"><div class="svc-icon">📱</div><div class="svc-name">MOBILE & DESKTOP</div><div class="svc-desc">iOS, Android, Windows — one unified system everywhere</div></div>
+      <div class="svc"><div class="svc-icon">🍳</div><div class="svc-name">KITCHEN DISPLAY</div><div class="svc-desc">Real-time order queue system for kitchen operations</div></div>
+      <div class="svc"><div class="svc-icon">🔗</div><div class="svc-name">DELIVERY PLATFORMS</div><div class="svc-desc">Hungerstation, Jahez, Mrsool fully integrated</div></div>
     </div>
   </div>
 </div>
@@ -860,65 +660,39 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
 <script>
-// ── CURSOR ──────────────────────────────────────────────
-const cur  = document.getElementById('cursor');
+gsap.registerPlugin(ScrollTrigger);
+
+// ── CURSOR ──────────────────────────────────────────────────
+const cur = document.getElementById('cursor');
 const curR = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-
+let mx = 0, my = 0, lx = 0, ly = 0;
 document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-
-(function cursorLoop() {
-  cur.style.left  = mx + 'px';
-  cur.style.top   = my + 'px';
-  rx += (mx - rx) * 0.14;
-  ry += (my - ry) * 0.14;
-  curR.style.left = rx + 'px';
-  curR.style.top  = ry + 'px';
-  requestAnimationFrame(cursorLoop);
+(function loop() {
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+  lx += (mx - lx) * .14; ly += (my - ly) * .14;
+  curR.style.left = lx + 'px'; curR.style.top = ly + 'px';
+  requestAnimationFrame(loop);
 })();
-
-document.querySelectorAll('a, button, .proj-card, .svc-card, .cta-btn').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cur.style.transform  = 'translate(-50%,-50%) scale(2.5)';
-    curR.style.transform = 'translate(-50%,-50%) scale(1.6)';
-    curR.style.opacity   = '0.3';
-  });
-  el.addEventListener('mouseleave', () => {
-    cur.style.transform  = 'translate(-50%,-50%) scale(1)';
-    curR.style.transform = 'translate(-50%,-50%) scale(1)';
-    curR.style.opacity   = '1';
-  });
+document.querySelectorAll('a,button,.proj-card,.svc-card,.cta-btn,.node').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.transform='translate(-50%,-50%) scale(2.5)'; curR.style.transform='translate(-50%,-50%) scale(1.5)'; curR.style.opacity='.3'; });
+  el.addEventListener('mouseleave', () => { cur.style.transform='translate(-50%,-50%) scale(1)'; curR.style.transform='translate(-50%,-50%) scale(1)'; curR.style.opacity='1'; });
 });
 
-// ── LANGUAGE ─────────────────────────────────────────────
+// ── LANGUAGE ────────────────────────────────────────────────
 const T = {
   en: {
-    'h-role':      'BUILDER · INNOVATOR · DB',
-    'sl-lbl':      'SCROLL',
-    'about-body':  'Builder, innovator, and founder of DB — a personal brand pushing the limits of what technology can create. Based in Saudi Arabia, shipping products that matter.',
-    'st1':         'Restopos — Saudi-Compliant POS System',
-    'st2':         'Active GitHub projects shipping right now',
-    'st3':         'Ideas queued. Systems building.',
-    'resto-sub':   'The complete restaurant management system built for Saudi Arabia. ZATCA-compliant, Arabic-first, and built to handle real operations at scale.',
-    'cta-lbl':     'EXPLORE SYSTEM',
-    'ct-lbl':      "LET'S BUILD SOMETHING",
-    'ct-big':      'GET IN\nTOUCH',
-    'mod-sub':     'Saudi-Compliant Restaurant Management System',
-    'ft':          '© 2026 SABI · DB · ALL SYSTEMS ACTIVE',
+    'sl-lbl':'SCROLL','about-body':'Builder, innovator, and founder of DB — a personal brand pushing the limits of what technology can create. Based in Saudi Arabia, shipping products that matter.',
+    'st1':'Restopos — Saudi-Compliant POS System','st2':'Active GitHub projects shipping right now','st3':'Ideas queued. Systems building.',
+    'resto-sub':'The complete restaurant management system built for Saudi Arabia. ZATCA-compliant, Arabic-first, and built to handle real operations at scale.',
+    'cta-lbl':'EXPLORE SYSTEM','ct-lbl':"LET'S BUILD SOMETHING",'ct-big':'GET IN\nTOUCH',
+    'mod-sub':'Saudi-Compliant Restaurant Management System','ft':'© 2026 SABI · DB · ALL SYSTEMS ACTIVE',
   },
   de: {
-    'h-role':      'ENTWICKLER · INNOVATOR · DB',
-    'sl-lbl':      'SCROLLEN',
-    'about-body':  'Entwickler, Innovator und Gründer von DB — eine persönliche Marke, die die Grenzen der Technologie neu definiert. Ansässig in Saudi-Arabien.',
-    'st1':         'Restopos — Saudi-konformes Kassensystem',
-    'st2':         'Aktive GitHub-Projekte in Entwicklung',
-    'st3':         'Ideen in der Warteschlange. Systeme im Aufbau.',
-    'resto-sub':   'Das komplette Restaurant-Management-System für Saudi-Arabien. ZATCA-konform, arabisch-first, für den echten Betrieb.',
-    'cta-lbl':     'SYSTEM ERKUNDEN',
-    'ct-lbl':      'LASS UNS BAUEN',
-    'ct-big':      'KONTAKT\nAUFNEHMEN',
-    'mod-sub':     'Saudi-konformes Restaurant-Management-System',
-    'ft':          '© 2026 SABI · DB · ALLE SYSTEME AKTIV',
+    'sl-lbl':'SCROLLEN','about-body':'Entwickler, Innovator und Gründer von DB — eine persönliche Marke, die die Grenzen der Technologie neu definiert. Ansässig in Saudi-Arabien.',
+    'st1':'Restopos — Saudi-konformes Kassensystem','st2':'Aktive GitHub-Projekte in Entwicklung','st3':'Ideen in der Warteschlange. Systeme im Aufbau.',
+    'resto-sub':'Das komplette Restaurant-Management-System für Saudi-Arabien. ZATCA-konform, arabisch-first, für den echten Betrieb.',
+    'cta-lbl':'SYSTEM ERKUNDEN','ct-lbl':'LASS UNS BAUEN','ct-big':'KONTAKT\nAUFNEHMEN',
+    'mod-sub':'Saudi-konformes Restaurant-Management-System','ft':'© 2026 SABI · ALLE SYSTEME AKTIV',
   }
 };
 let lang = 'en';
@@ -926,144 +700,281 @@ function setLang(l) {
   lang = l;
   Object.entries(T[l]).forEach(([id, text]) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = text;
+    if (!el) return;
+    if (id === 'ct-big') el.innerHTML = text.replace('\n','<br>');
+    else el.textContent = text;
   });
-  document.getElementById('btn-en').classList.toggle('on', l === 'en');
-  document.getElementById('btn-de').classList.toggle('on', l === 'de');
+  document.getElementById('btn-en').classList.toggle('on', l==='en');
+  document.getElementById('btn-de').classList.toggle('on', l==='de');
 }
 
-// ── AMBIENT CANVAS ────────────────────────────────────────
-(function bg() {
-  const c   = document.getElementById('bg-canvas');
-  const ctx = c.getContext('2d');
-  let W, H;
-  function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
-  resize(); addEventListener('resize', resize);
+// ── AMBIENT CANVAS ──────────────────────────────────────────
+const bgC = document.getElementById('bg-canvas');
+const bgX = bgC.getContext('2d');
+let BW, BH;
+function resizeBg() { BW = bgC.width = innerWidth; BH = bgC.height = innerHeight; }
+resizeBg(); addEventListener('resize', resizeBg);
 
-  const pts = Array.from({ length: 160 }, () => ({
-    x:  Math.random() * 1920,
-    y:  Math.random() * 1080,
-    r:  Math.random() * 1.1 + 0.2,
-    vy: -(Math.random() * 0.2 + 0.04),
-    vx: (Math.random() - 0.5) * 0.08,
-    a:  Math.random() * 0.45 + 0.08,
-    ph: Math.random() * Math.PI * 2,
-  }));
+const pts = Array.from({length:120}, () => ({
+  x: Math.random()*1920, y: Math.random()*1080,
+  r: Math.random()*.9+.2, vx: (Math.random()-.5)*.06,
+  vy: -(Math.random()*.18+.04), a: Math.random()*.4+.08, ph: Math.random()*Math.PI*2
+}));
 
-  function frame() {
-    ctx.clearRect(0, 0, W, H);
+// Explosion sparks
+const sparks = [];
+let exploded = false;
 
-    // Subtle glow spots
-    const g = ctx.createRadialGradient(W*.3, H*.4, 0, W*.3, H*.4, W*.4);
-    g.addColorStop(0, 'rgba(0,80,140,0.04)');
-    g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-
-    pts.forEach(p => {
-      p.ph += 0.015; p.y += p.vy; p.x += p.vx;
-      if (p.y < -2) { p.y = H + 2; p.x = Math.random() * W; }
-      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-      const a = p.a * (0.6 + 0.4 * Math.sin(p.ph));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0,229,255,${a})`;
-      ctx.fill();
-    });
-    requestAnimationFrame(frame);
+class Spark {
+  constructor(x, y) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 18 + 4;
+    this.x = x; this.y = y;
+    this.vx = Math.cos(angle) * speed; this.vy = Math.sin(angle) * speed;
+    this.life = 1; this.decay = Math.random() * .018 + .008;
+    this.size = Math.random() * 3.5 + .8;
+    this.color = ['#00E5FF','#00FF94','#ffffff','#a0f8ff','#00c8e0'][Math.floor(Math.random()*5)];
+    this.tail = [];
   }
-  frame();
+  update() {
+    this.tail.push({x:this.x, y:this.y});
+    if (this.tail.length > 8) this.tail.shift();
+    this.x += this.vx; this.y += this.vy;
+    this.vx *= .96; this.vy *= .96; this.vy += .12;
+    this.life -= this.decay;
+  }
+  draw(ctx) {
+    if (this.tail.length > 1) {
+      ctx.beginPath();
+      ctx.moveTo(this.tail[0].x, this.tail[0].y);
+      for (let i = 1; i < this.tail.length; i++) ctx.lineTo(this.tail[i].x, this.tail[i].y);
+      ctx.strokeStyle = this.color;
+      ctx.globalAlpha = this.life * .4;
+      ctx.lineWidth = this.size * .5;
+      ctx.stroke();
+    }
+    ctx.save();
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.shadowBlur = 12; ctx.shadowColor = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function triggerExplosion(cx, cy) {
+  if (exploded) return;
+  exploded = true;
+  for (let i = 0; i < 180; i++) sparks.push(new Spark(cx, cy));
+}
+
+(function bgLoop() {
+  bgX.clearRect(0, 0, BW, BH);
+
+  // Ambient glow
+  const g = bgX.createRadialGradient(BW*.35, BH*.4, 0, BW*.35, BH*.4, BW*.5);
+  g.addColorStop(0, 'rgba(0,60,120,.05)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  bgX.fillStyle = g; bgX.fillRect(0, 0, BW, BH);
+
+  pts.forEach(p => {
+    p.ph += .012; p.y += p.vy; p.x += p.vx;
+    if (p.y < -2) { p.y = BH+2; p.x = Math.random()*BW; }
+    if (p.x < 0) p.x = BW; if (p.x > BW) p.x = 0;
+    const a = p.a * (.6 + .4*Math.sin(p.ph));
+    bgX.beginPath(); bgX.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    bgX.fillStyle = `rgba(0,229,255,${a})`; bgX.fill();
+  });
+
+  // Sparks
+  bgX.save(); bgX.lineWidth = 1;
+  for (let i = sparks.length-1; i >= 0; i--) {
+    sparks[i].update(); sparks[i].draw(bgX);
+    if (sparks[i].life <= 0) sparks.splice(i, 1);
+  }
+  bgX.restore();
+
+  requestAnimationFrame(bgLoop);
 })();
 
-// ── TILT ON MOUSEMOVE (hero photo) ───────────────────────
-const frame = document.getElementById('photo-frame');
-document.getElementById('s-hero').addEventListener('mousemove', e => {
-  const rect = frame.getBoundingClientRect();
-  const cx   = rect.left + rect.width  / 2;
-  const cy   = rect.top  + rect.height / 2;
-  const rx   = (e.clientY - cy) / window.innerHeight * 14;
-  const ry   = (e.clientX - cx) / window.innerWidth  * -14;
-  frame.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.03)`;
-  frame.style.transition = 'transform 0.1s';
-});
-document.getElementById('s-hero').addEventListener('mouseleave', () => {
-  frame.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
-  frame.style.transition = 'transform 0.6s ease';
+// ── SKULL SCROLL ANIMATION ───────────────────────────────────
+const skullWrap = document.getElementById('skull-wrap');
+const crackGroup = document.getElementById('cracks');
+const flashEl = document.getElementById('flash');
+const scrollHint = document.getElementById('scroll-hint');
+const eyeL = document.getElementById('eye-l');
+const eyeR = document.getElementById('eye-r');
+const skEdge = document.getElementById('sk-edge');
+
+// Get crack paths and set dasharray for draw animation
+const cracks = document.querySelectorAll('.ck');
+cracks.forEach(c => {
+  const len = c.getTotalLength ? c.getTotalLength() : 100;
+  c.style.strokeDasharray = len;
+  c.style.strokeDashoffset = len;
 });
 
-// ── SCROLL REVEAL ─────────────────────────────────────────
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in');
+// Wire path lengths
+const wireEls = [1,2,3,4,5].map(i => document.getElementById('w'+i));
+
+let skullExploded = false;
+
+// Master scroll timeline
+const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: '#skull-scene',
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 1.4,
+    onUpdate(self) {
+      const p = self.progress;
+
+      // ── Phase 1 (0-0.20): Skull floats, idle ──
+      if (p < 0.20) {
+        scrollHint.style.opacity = Math.max(0, 1 - p*8);
+      }
+
+      // ── Phase 2 (0.20-0.45): Skull tilts ──
+      if (p >= 0.20 && p < 0.45) {
+        const t = (p - 0.20) / 0.25;
+        const tiltY = Math.sin(t * Math.PI) * 28;
+        const tiltX = Math.sin(t * Math.PI * .7) * 12;
+        skullWrap.style.transform = `perspective(1200px) rotateY(${tiltY}deg) rotateX(${tiltX}deg)`;
+      } else if (p >= 0.45 && p < 0.55) {
+        // Return to center
+        const t = (p - 0.45) / 0.10;
+        const tiltY = (1-t) * 28 * Math.sin(Math.PI);
+        skullWrap.style.transform = `perspective(1200px) rotateY(${tiltY}deg) rotateX(0deg)`;
+      } else if (p < 0.20) {
+        skullWrap.style.transform = '';
+      }
+
+      // ── Phase 3 (0.40-0.58): Cracks appear ──
+      if (p >= 0.38 && p < 0.58) {
+        const t = Math.min(1, (p - 0.38) / 0.20);
+        crackGroup.style.opacity = t;
+        const eyeIntensity = 1 + t * 1.8;
+        eyeL.setAttribute('filter', `url(#glow-eye)`);
+        eyeR.setAttribute('filter', `url(#glow-eye)`);
+        eyeL.style.opacity = Math.min(1, 0.9 + t * .5);
+        eyeR.style.opacity = Math.min(1, 0.9 + t * .5);
+        cracks.forEach(c => {
+          const len = parseFloat(c.style.strokeDasharray);
+          c.style.strokeDashoffset = len * (1 - t);
+        });
+        skEdge.setAttribute('opacity', 0.3 + t * 0.7);
+      }
+
+      // ── Phase 4 (0.55-0.62): Shake + build ──
+      if (p >= 0.55 && p < 0.62) {
+        if (!skullWrap.classList.contains('shaking')) {
+          skullWrap.classList.add('shaking');
+        }
+        const t = (p - 0.55) / 0.07;
+        const sc = 1 + t * 0.12;
+        skullWrap.style.transform = `scale(${sc})`;
+      } else {
+        skullWrap.classList.remove('shaking');
+      }
+
+      // ── Phase 5 (0.60-0.68): EXPLOSION ──
+      if (p >= 0.60 && p < 0.68) {
+        const t = (p - 0.60) / 0.08;
+
+        // Flash burst
+        if (t < 0.3) {
+          flashEl.style.opacity = t / 0.3 * 0.85;
+        } else {
+          flashEl.style.opacity = Math.max(0, 0.85 - (t - 0.3) / 0.7 * 0.85);
+        }
+
+        // Skull dissolves
+        const dissolve = Math.max(0, 1 - (t - 0.1) / 0.5);
+        skullWrap.style.opacity = dissolve;
+        skullWrap.style.transform = `scale(${1 + t * .4}) blur(${t * 20}px)`;
+        skullWrap.style.filter = `blur(${t * 18}px) drop-shadow(0 0 ${80*t}px rgba(0,229,255,.9))`;
+
+        // Trigger spark burst
+        if (t > 0.08 && !skullExploded) {
+          const rect = skullWrap.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          triggerExplosion(cx, cy);
+          skullExploded = true;
+        }
+      }
+
+      // ── Phase 6 (0.65-1.0): Wires draw out to nodes ──
+      if (p >= 0.65) {
+        skullWrap.style.opacity = 0;
+        flashEl.style.opacity = 0;
+
+        const wt = Math.min(1, (p - 0.65) / 0.35);
+
+        // Draw wires sequentially
+        wireEls.forEach((w, i) => {
+          const delay = i * 0.15;
+          const localT = Math.max(0, Math.min(1, (wt - delay) / 0.5));
+          const len = 900;
+          w.style.strokeDashoffset = len * (1 - localT);
+          w.style.opacity = localT > 0 ? 0.7 : 0;
+
+          // Show node when wire is 85% drawn
+          if (localT > 0.85) {
+            document.getElementById('n'+(i+1)).classList.add('visible');
+          }
+        });
+      } else {
+        // Hide nodes / reset wires if scrolled back up
+        if (p < 0.60) {
+          skullExploded = false;
+          exploded = false;
+          skullWrap.style.opacity = 1;
+          skullWrap.style.filter = 'drop-shadow(0 0 60px rgba(0,229,255,.2))';
+        }
+        if (p < 0.65) {
+          [1,2,3,4,5].forEach(i => document.getElementById('n'+i).classList.remove('visible'));
+          wireEls.forEach(w => { w.style.strokeDashoffset = 900; w.style.opacity = 0; });
+        }
+      }
     }
-  });
-}, { threshold: 0.12 });
-
-document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
-
-// ── GSAP HERO PARALLAX ───────────────────────────────────
-gsap.registerPlugin(ScrollTrigger);
-
-gsap.to('.bg-word.w1', {
-  y: '-25%',
-  scrollTrigger: { trigger: '#s-hero', start: 'top top', end: 'bottom top', scrub: true }
-});
-gsap.to('.bg-word.w2', {
-  y: '-18%',
-  scrollTrigger: { trigger: '#s-hero', start: 'top top', end: 'bottom top', scrub: true }
-});
-gsap.to('.hero-center', {
-  y: '-10%', opacity: 0.2,
-  scrollTrigger: { trigger: '#s-hero', start: 'top top', end: 'bottom top', scrub: true }
+  }
 });
 
-// ── MODAL ─────────────────────────────────────────────────
+// Hero entrance
+gsap.from(skullWrap, { scale: .6, opacity: 0, duration: 1.6, ease: 'power3.out', delay: .2 });
+
+// ── SCROLL REVEAL ────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── MODAL ────────────────────────────────────────────────────
 function openModal() {
   document.getElementById('overlay').classList.add('open');
-  gsap.from('#modal', { scale: 0.9, opacity: 0, duration: 0.45, ease: 'back.out(1.5)' });
+  gsap.from('#modal', { scale:.92, opacity:0, duration:.4, ease:'back.out(1.5)' });
   document.body.style.overflow = 'hidden';
 }
 function closeModal() {
   document.getElementById('overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-function overlayClick(e) {
-  if (e.target === document.getElementById('overlay')) closeModal();
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function overlayClick(e) { if (e.target===document.getElementById('overlay')) closeModal(); }
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 
-// ── LOADER ────────────────────────────────────────────────
-const msgs = ['LOADING ASSETS', 'CALIBRATING UI', 'DEPLOYING SYSTEMS', 'WELCOME'];
+// ── LOADER ───────────────────────────────────────────────────
+const msgs = ['LOADING SKULL','CHARGING CIRCUITS','PRIMING WIRES','SYSTEMS READY'];
 let mi = 0;
 const ldMsg = document.getElementById('ld-msg');
-const ldInt = setInterval(() => {
-  mi++;
-  if (mi < msgs.length) ldMsg.textContent = msgs[mi];
-  else clearInterval(ldInt);
-}, 420);
+const ldInt = setInterval(() => { mi++; if (mi < msgs.length) ldMsg.textContent = msgs[mi]; else clearInterval(ldInt); }, 480);
 
 window.addEventListener('load', () => {
   setTimeout(() => {
-    gsap.to('#loader', {
-      opacity: 0, duration: 0.9, ease: 'power2.inOut',
-      onComplete() {
-        document.getElementById('loader').style.display = 'none';
-        // Hero entrance
-        gsap.from('.photo-frame', { scale: 0.7, opacity: 0, duration: 1.4, ease: 'power3.out', delay: 0.1 });
-        gsap.from('.hero-name',   { y: 40, opacity: 0, duration: 1.1, ease: 'power2.out', delay: 0.5 });
-        gsap.from('.hero-role',   { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.8 });
-        gsap.from('.bg-word.w1',  { x: -60, opacity: 0, duration: 1.5, ease: 'power2.out', delay: 0.2 });
-        gsap.from('.bg-word.w2',  { x: 60,  opacity: 0, duration: 1.5, ease: 'power2.out', delay: 0.3 });
-        gsap.from('.scroll-line', { opacity: 0, duration: 1, delay: 1.5 });
-      }
-    });
-  }, 1900);
+    gsap.to('#loader', { opacity:0, duration:.9, ease:'power2.inOut', onComplete() { document.getElementById('loader').style.display='none'; }});
+  }, 2100);
 });
-
-// ── REDUCED MOTION ────────────────────────────────────────
-if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  document.querySelectorAll('.orbit,.orbit2,.photo-glow').forEach(e => e.style.animation = 'none');
-}
 </script>
 </body>
 </html>
