@@ -2,721 +2,925 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SABI — DB</title>
-  <meta name="description" content="Sabi · DB — Builder, Innovator, Creator. Saudi-based developer behind Restopos and more.">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    /* ── TOKENS ─────────────────────────────────────────── */
     :root {
-      --bg:       #020B14;
-      --surface:  #081422;
-      --cyan:     #00E5FF;
-      --green:    #00FF94;
-      --purple:   #a855f7;
-      --dim:      #3A5570;
-      --text:     #DCF0F8;
-      --font-hd:  'Orbitron', monospace;
-      --font-bd:  'Space Grotesk', sans-serif;
+      --bg: #04080F;
+      --cyan: #00E5FF;
+      --green: #00FF94;
+      --purple: #a855f7;
+      --dim: #2A4055;
+      --text: #E8F4FC;
     }
-
-    /* ── RESET ──────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-bd);
+      font-family: 'Space Grotesk', sans-serif;
       overflow-x: hidden;
+      cursor: none;
     }
-    ::-webkit-scrollbar { width: 3px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; }
+    ::-webkit-scrollbar { width: 2px; }
+    ::-webkit-scrollbar-thumb { background: var(--cyan); }
 
-    /* ── LOADER ─────────────────────────────────────────── */
+    /* ── CURSOR ── */
+    #cursor {
+      position: fixed; z-index: 9999;
+      width: 12px; height: 12px;
+      background: var(--cyan);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+      mix-blend-mode: difference;
+    }
+    #cursor-ring {
+      position: fixed; z-index: 9998;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(0,229,255,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    }
+    body:hover #cursor { opacity: 1; }
+
+    /* ── LOADER ── */
     #loader {
-      position: fixed; inset: 0; z-index: 9999;
+      position: fixed; inset: 0; z-index: 9000;
       background: var(--bg);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 2.5rem;
+      gap: 2rem;
     }
-    .loader-mark {
-      position: relative;
-      width: 80px; height: 80px;
+    .ld-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 8rem;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #00E5FF, #00FF94);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(0,229,255,0.4));
+      animation: ld-pulse 0.8s ease-in-out infinite alternate;
     }
-    .loader-mark svg { width: 100%; height: 100%; }
-    .loader-mark::after {
-      content: '';
-      position: absolute; inset: -12px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,229,255,0.2);
-      animation: spin 4s linear infinite;
+    @keyframes ld-pulse {
+      from { filter: drop-shadow(0 0 20px rgba(0,229,255,0.3)); }
+      to   { filter: drop-shadow(0 0 60px rgba(0,229,255,0.7)); }
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loader-text {
-      font-family: var(--font-hd);
-      font-size: 0.6rem;
-      letter-spacing: 0.5em;
-      color: var(--dim);
-      animation: flicker 1.5s ease-in-out infinite alternate;
-    }
-    @keyframes flicker {
-      from { opacity: 0.4; }
-      to   { opacity: 1; color: var(--cyan); }
-    }
-
-    .loader-bar {
-      width: 180px; height: 1px;
-      background: rgba(255,255,255,0.06);
-      overflow: hidden;
-    }
-    .loader-fill {
+    .ld-bar { width: 200px; height: 1px; background: rgba(255,255,255,0.06); overflow: hidden; }
+    .ld-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--cyan), var(--green));
+      animation: ld-grow 1.8s cubic-bezier(.4,0,.2,1) forwards 0.3s;
       width: 0;
-      animation: bar-fill 1.8s cubic-bezier(0.4,0,0.2,1) forwards 0.2s;
     }
-    @keyframes bar-fill { to { width: 100%; } }
+    @keyframes ld-grow { to { width: 100%; } }
+    .ld-text {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.55rem; letter-spacing: 0.5em;
+      color: var(--dim);
+      animation: blink 1s ease-in-out infinite alternate;
+    }
+    @keyframes blink { to { color: var(--cyan); } }
 
-    /* ── NAV ────────────────────────────────────────────── */
+    /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 900;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 800;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.4rem 3rem;
-      backdrop-filter: blur(24px) saturate(1.6);
-      background: rgba(2,11,20,0.75);
-      border-bottom: 1px solid rgba(0,229,255,0.06);
-      transition: padding 0.4s;
+      padding: 2rem 3rem;
+      mix-blend-mode: difference;
     }
-    @media (max-width:600px) { nav { padding: 1rem 1.4rem; } }
-
-    .nav-logo { cursor: default; }
-    .nav-logo svg { width: 64px; height: 42px; display: block; }
-
+    @media (max-width: 600px) { nav { padding: 1.4rem 1.6rem; } }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; letter-spacing: 0.15em;
+      color: white;
+    }
     .lang-pill {
-      display: flex; gap: 3px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 24px;
-      padding: 3px;
+      display: flex; gap: 2px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 3px;
     }
     .lbtn {
       background: none; border: none;
-      font-family: var(--font-hd);
-      font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--dim);
-      padding: 6px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.25s;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.1em; color: rgba(255,255,255,0.4);
+      padding: 5px 14px; border-radius: 16px; cursor: none;
+      transition: all 0.3s;
     }
-    .lbtn.on { background: var(--cyan); color: var(--bg); }
+    .lbtn.on { background: white; color: black; }
 
-    /* ── BG CANVAS (fixed ambient) ──────────────────────── */
+    /* ── CANVAS ── */
     #bg-canvas {
-      position: fixed; inset: 0;
-      z-index: 0; pointer-events: none;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
     }
 
-    /* ── HERO ───────────────────────────────────────────── */
-    #hero {
-      position: relative;
-      height: 700vh;          /* tall scroll room */
-      z-index: 1;
-    }
-    .hero-sticky {
-      position: sticky; top: 0;
+    /* ══════════════════════════════════════════
+       SECTION 1 — HERO
+    ══════════════════════════════════════════ */
+    #s-hero {
+      position: relative; z-index: 1;
       height: 100vh;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
     }
 
-    /* neural wire canvas */
-    #nc {
-      position: absolute; inset: 0;
-      z-index: 2; pointer-events: none;
+    /* Giant BG text */
+    .bg-word {
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(20vw, 30vw, 32vw);
+      line-height: 0.85;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,229,255,0.07);
+      letter-spacing: -0.02em;
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .bg-word.w1 { top: 5%; left: -2%; }
+    .bg-word.w2 { bottom: 0%; right: -2%; color: transparent; -webkit-text-stroke: 1px rgba(0,255,148,0.06); }
+
+    /* Portrait wrapper */
+    .hero-center {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 2rem;
     }
 
-    /* portrait */
-    .portrait {
-      position: absolute; z-index: 3;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 1.6rem;
-      will-change: transform, opacity;
-    }
-    .p-ring-wrap {
+    .photo-frame {
       position: relative;
-      width: clamp(220px, 30vw, 380px);
-      height: clamp(220px, 30vw, 380px);
+      width: clamp(260px, 32vw, 480px);
+      height: clamp(260px, 32vw, 480px);
+      will-change: transform;
     }
-    .p-ring {
-      position: absolute; inset: 0;
+
+    /* Glow behind photo */
+    .photo-glow {
+      position: absolute; inset: -30px;
       border-radius: 50%;
-      border: 1px solid rgba(0,229,255,0.18);
-      animation: rpulse 3s ease-in-out infinite;
+      background: radial-gradient(ellipse, rgba(0,229,255,0.12) 0%, transparent 70%);
+      animation: glow-breathe 4s ease-in-out infinite;
     }
-    .p-ring:nth-child(2) { inset: -14px; animation-delay:.6s; opacity:.5; }
-    .p-ring:nth-child(3) { inset: -28px; animation-delay:1.2s; opacity:.22; }
-    @keyframes rpulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.06); }
-      50%      { box-shadow: 0 0 0 8px rgba(0,229,255,0); }
+    @keyframes glow-breathe {
+      0%,100% { opacity: 0.5; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.08); }
     }
+
+    /* Rotating orbit ring */
+    .orbit {
+      position: absolute; inset: -18px;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      border-top-color: rgba(0,229,255,0.4);
+      border-right-color: rgba(0,229,255,0.1);
+      animation: orbit-spin 8s linear infinite;
+    }
+    .orbit2 {
+      position: absolute; inset: -34px;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      border-bottom-color: rgba(0,255,148,0.3);
+      border-left-color: rgba(0,255,148,0.08);
+      animation: orbit-spin 14s linear infinite reverse;
+    }
+    @keyframes orbit-spin { to { transform: rotate(360deg); } }
+
     #portrait-img {
-      position: absolute; inset: 0;
       width: 100%; height: 100%;
       object-fit: cover;
-      object-position: center 8%;  /* show head */
+      object-position: center 8%;
       border-radius: 50%;
-      border: 1.5px solid rgba(0,229,255,0.25);
-      will-change: opacity, filter;
-      transition: filter 0.05s linear;
+      border: 1px solid rgba(0,229,255,0.2);
+      display: block;
       background: linear-gradient(135deg, #0A1628, #051020);
     }
-    /* fallback when image missing */
-    #portrait-img::after {
-      content: 'SABI';
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-hd);
-      font-size: 2rem;
-      color: var(--cyan);
-    }
 
+    /* Name */
     .hero-name {
-      font-family: var(--font-hd);
-      font-size: clamp(2.2rem, 6vw, 5.5rem);
-      font-weight: 900;
-      letter-spacing: 0.35em;
-      color: var(--text);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      letter-spacing: 0.4em;
       text-align: center;
-      will-change: opacity;
+      line-height: 1;
     }
-    .hero-name .c { color: var(--cyan); }
+    .hero-name .grad {
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-    .hero-tag {
+    .hero-role {
       font-size: 0.72rem;
-      letter-spacing: 0.45em;
+      letter-spacing: 0.5em;
       color: var(--dim);
       text-transform: uppercase;
       text-align: center;
-      will-change: opacity;
     }
 
-    /* scroll hint */
-    .scroll-cue {
+    /* Scroll line */
+    .scroll-line {
       position: absolute; bottom: 2.5rem; left: 50%;
       transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center;
-      gap: 10px; z-index: 5;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      z-index: 5;
     }
-    .sc-label {
-      font-family: var(--font-hd);
-      font-size: 0.55rem; letter-spacing: 0.5em; color: var(--dim);
+    .sl-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.5rem; letter-spacing: 0.6em; color: var(--dim);
+      writing-mode: horizontal-tb;
     }
-    .sc-line {
-      width: 1px; height: 52px;
+    .sl-track {
+      width: 1px; height: 60px;
       background: linear-gradient(to bottom, transparent, var(--cyan));
-      animation: scl 2s ease-in-out infinite;
+      animation: sl-anim 2s ease-in-out infinite;
     }
-    @keyframes scl {
-      0%   { transform: scaleY(0); transform-origin: top; opacity:0; }
-      40%  { transform: scaleY(1); transform-origin: top; opacity:1; }
-      60%  { transform: scaleY(1); transform-origin: bottom; opacity:1; }
-      100% { transform: scaleY(0); transform-origin: bottom; opacity:0; }
+    @keyframes sl-anim {
+      0%,100% { transform: scaleY(0) translateY(-50%); opacity: 0; }
+      50%      { transform: scaleY(1) translateY(0);    opacity: 1; }
     }
 
-    /* phase text */
-    .phase-txt {
-      position: absolute; z-index: 5;
-      bottom: 12%; left: 50%; transform: translateX(-50%);
-      font-family: var(--font-hd);
-      font-size: clamp(0.5rem, 1.2vw, 0.7rem);
-      letter-spacing: 0.45em;
-      color: var(--cyan);
-      text-transform: uppercase;
-      text-shadow: 0 0 20px rgba(0,229,255,0.6);
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
+    /* ══════════════════════════════════════════
+       SECTION 2 — ABOUT / IDENTITY
+    ══════════════════════════════════════════ */
+    #s-about {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 8% 8rem;
+      gap: 6rem;
+      overflow: hidden;
+    }
+    @media (max-width: 900px) {
+      #s-about { grid-template-columns: 1fr; gap: 3rem; padding: 6rem 6%; }
     }
 
-    /* ── NODES ──────────────────────────────────────────── */
-    .node {
-      position: absolute; z-index: 6;
-      opacity: 0; transform: scale(0);
-      pointer-events: none;
-      transition: box-shadow 0.3s;
-      will-change: opacity, transform;
+    .about-left { position: relative; }
+    .section-eye {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.6rem; letter-spacing: 0.5em;
+      color: var(--cyan); text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
     }
-    .node.show { pointer-events: all; }
-
-    .ni {
-      background: rgba(5,14,26,0.92);
-      border: 1px solid rgba(0,229,255,0.3);
-      border-radius: 14px;
-      padding: 0.85rem 1.3rem;
-      cursor: pointer;
-      backdrop-filter: blur(14px);
-      transition: all 0.3s;
-      white-space: nowrap;
-      box-shadow: 0 0 20px rgba(0,229,255,0.06);
-    }
-    .ni:hover {
-      border-color: var(--cyan);
-      box-shadow: 0 0 35px rgba(0,229,255,0.25);
-      transform: translateY(-2px) scale(1.04);
-    }
-
-    .nl {
-      font-family: var(--font-hd);
-      font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.2em; color: var(--cyan);
-      display: flex; align-items: center; gap: 7px;
-    }
-    .ns {
-      font-size: 0.6rem; color: var(--dim);
-      margin-top: 3px; padding-left: 15px;
-    }
-    .dot {
-      width: 6px; height: 6px; border-radius: 50%;
+    .section-eye::before {
+      content: '';
+      width: 30px; height: 1px;
       background: var(--cyan);
-      animation: dpulse 2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
-    @keyframes dpulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(0,229,255,0.5); }
-      50%      { box-shadow: 0 0 0 5px rgba(0,229,255,0); }
     }
 
-    /* Restopos */
-    .n-resto .ni  { border-color: rgba(0,255,148,0.35); box-shadow: 0 0 28px rgba(0,255,148,0.08); }
-    .n-resto .nl  { color: var(--green); }
-    .n-resto .dot { background: var(--green); animation-name: gpulse; }
-    @keyframes gpulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(0,255,148,0.5); }
-      50%      { box-shadow: 0 0 0 5px rgba(0,255,148,0); }
+    .about-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 6vw, 6.5rem);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      color: white;
+      margin-bottom: 2rem;
     }
-    .n-resto .ni:hover { border-color: var(--green); box-shadow: 0 0 50px rgba(0,255,148,0.3); }
+    .about-headline .accent { color: var(--cyan); }
 
-    /* Contact */
-    .n-contact .ni  { border-color: rgba(168,85,247,0.35); box-shadow: 0 0 28px rgba(168,85,247,0.08); }
-    .n-contact .nl  { color: var(--purple); }
-    .n-contact .dot { background: var(--purple); animation-name: ppulse; }
-    @keyframes ppulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(168,85,247,0.5); }
-      50%      { box-shadow: 0 0 0 5px rgba(168,85,247,0); }
+    .about-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(232,244,252,0.55);
+      max-width: 420px;
     }
-    .n-contact .ni:hover { border-color: var(--purple); box-shadow: 0 0 50px rgba(168,85,247,0.3); }
 
-    /* ── MOBILE NODES (below hero on small screens) ──────── */
-    #mobile-nodes {
-      display: none;
-      padding: 4rem 1.5rem 2rem;
-      background: var(--surface);
-      gap: 1rem;
-      flex-direction: column;
+    .about-right {
+      display: flex; flex-direction: column; gap: 1.5rem;
     }
-    @media (max-width: 768px) {
-      .node { display: none !important; }
-      #mobile-nodes { display: flex; }
+    .stat-row {
+      display: flex; align-items: baseline; gap: 1rem;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    .mob-node {
-      background: rgba(2,11,20,0.9);
-      border: 1px solid rgba(0,229,255,0.2);
-      border-radius: 14px;
-      padding: 1.1rem 1.4rem;
-      cursor: pointer;
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--cyan), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-desc { font-size: 0.85rem; color: rgba(255,255,255,0.4); }
+
+    /* ══════════════════════════════════════════
+       SECTION 3 — RESTOPOS  (hero product section)
+    ══════════════════════════════════════════ */
+    #s-restopos {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      padding: 6rem 6%;
+    }
+
+    .resto-bg-text {
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(22vw, 28vw, 30vw);
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,255,148,0.05);
+      letter-spacing: -0.02em;
+      pointer-events: none; user-select: none;
+      white-space: nowrap;
+      left: 50%; transform: translateX(-50%);
+    }
+
+    .resto-content {
+      position: relative; z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 5rem;
+      width: 100%;
+      max-width: 1200px;
+    }
+    @media (max-width: 900px) {
+      .resto-content { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    .resto-left .section-eye { color: var(--green); }
+    .resto-left .section-eye::before { background: var(--green); }
+
+    .resto-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 7vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: white;
+      margin-bottom: 1.5rem;
+    }
+    .resto-title span { color: var(--green); }
+
+    .resto-subtitle {
+      font-size: 0.9rem; line-height: 1.7;
+      color: rgba(232,244,252,0.5);
+      margin-bottom: 2.5rem;
+      max-width: 400px;
+    }
+
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--green);
+      color: #000;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.2em;
+      padding: 1rem 2rem;
+      border: none; border-radius: 4px;
+      cursor: none;
       transition: all 0.3s;
+      text-transform: uppercase;
     }
-    .mob-node:hover { border-color: var(--cyan); box-shadow: 0 0 30px rgba(0,229,255,0.15); }
-    .mob-node.resto { border-color: rgba(0,255,148,0.3); }
-    .mob-node.resto:hover { border-color: var(--green); box-shadow: 0 0 30px rgba(0,255,148,0.2); }
-    .mob-label {
-      font-family: var(--font-hd);
-      font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.2em; color: var(--cyan);
+    .cta-btn:hover {
+      background: #00ffb3;
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0,255,148,0.3);
     }
-    .mob-node.resto .mob-label { color: var(--green); }
-    .mob-sub { font-size: 0.65rem; color: var(--dim); margin-top: 3px; }
+    .cta-arrow { font-size: 1rem; transition: transform 0.3s; }
+    .cta-btn:hover .cta-arrow { transform: translateX(4px); }
 
-    /* ── MODAL ──────────────────────────────────────────── */
+    .resto-right {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .svc-card {
+      background: rgba(0,255,148,0.03);
+      border: 1px solid rgba(0,255,148,0.1);
+      border-radius: 16px;
+      padding: 1.3rem;
+      transition: all 0.4s;
+    }
+    .svc-card:hover {
+      background: rgba(0,255,148,0.08);
+      border-color: rgba(0,255,148,0.3);
+      transform: translateY(-4px);
+    }
+    .svc-card:nth-child(2) { margin-top: 1.5rem; }
+    .svc-card:nth-child(4) { margin-top: 1.5rem; }
+    .svc-ico { font-size: 1.6rem; margin-bottom: 0.7rem; }
+    .svc-nm {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.58rem; font-weight: 700;
+      letter-spacing: 0.15em; color: var(--green);
+      margin-bottom: 0.4rem;
+    }
+    .svc-dc { font-size: 0.7rem; color: rgba(255,255,255,0.35); line-height: 1.5; }
+
+    /* ══════════════════════════════════════════
+       SECTION 4 — PROJECTS
+    ══════════════════════════════════════════ */
+    #s-projects {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      padding: 8rem 6%;
+      overflow: hidden;
+    }
+
+    .section-header {
+      margin-bottom: 5rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 6rem);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      color: white;
+    }
+    .section-title .accent { color: var(--cyan); }
+
+    .projects-track {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .proj-card {
+      position: relative;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      cursor: none;
+      transition: all 0.4s;
+      overflow: hidden;
+      text-decoration: none; color: var(--text);
+      display: block;
+    }
+    .proj-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,229,255,0.04), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .proj-card:hover { border-color: rgba(0,229,255,0.25); transform: translateY(-6px); }
+    .proj-card:hover::before { opacity: 1; }
+
+    .proj-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.3em;
+      color: var(--dim); margin-bottom: 1.5rem;
+    }
+    .proj-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; letter-spacing: 0.05em;
+      color: white; margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+    .proj-lang {
+      font-size: 0.7rem; color: var(--dim);
+      letter-spacing: 0.2em; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .proj-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.58rem; font-weight: 700;
+      letter-spacing: 0.2em; color: var(--cyan);
+      text-transform: uppercase;
+      transition: gap 0.3s;
+    }
+    .proj-card:hover .proj-link { gap: 10px; }
+
+    /* ══════════════════════════════════════════
+       SECTION 5 — CONTACT
+    ══════════════════════════════════════════ */
+    #s-contact {
+      position: relative; z-index: 1;
+      min-height: 80vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 6%;
+      overflow: hidden;
+    }
+
+    .contact-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,229,255,0.05) 0%, transparent 70%);
+    }
+
+    .contact-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.6rem; letter-spacing: 0.5em;
+      color: var(--cyan); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+      justify-content: center;
+    }
+    .contact-label::before, .contact-label::after {
+      content: ''; flex: 0 0 30px; height: 1px; background: var(--cyan);
+    }
+
+    .contact-big {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 8vw, 8rem);
+      letter-spacing: 0.1em;
+      line-height: 0.9;
+      color: white;
+      margin-bottom: 3rem;
+    }
+
+    .social-row {
+      display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .soc-link {
+      display: flex; align-items: center; gap: 0.9rem;
+      padding: 1rem 2rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 50px;
+      text-decoration: none; color: var(--text);
+      font-size: 0.85rem;
+      transition: all 0.3s;
+      cursor: none;
+    }
+    .soc-link:hover {
+      border-color: var(--cyan);
+      background: rgba(0,229,255,0.06);
+      transform: translateY(-3px);
+    }
+    .soc-ico { font-size: 1.1rem; }
+    .soc-handle { font-size: 0.72rem; color: var(--dim); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      font-family: 'Orbitron', monospace;
+      font-size: 0.55rem; letter-spacing: 0.4em;
+      color: var(--dim);
+    }
+
+    /* ── MODAL ── */
     .overlay {
-      position: fixed; inset: 0; z-index: 1000;
-      background: rgba(2,11,20,0.92);
-      backdrop-filter: blur(24px);
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(4,8,15,0.95);
+      backdrop-filter: blur(30px);
       display: flex; align-items: center; justify-content: center;
       padding: 2rem;
       opacity: 0; pointer-events: none;
-      transition: opacity 0.35s;
+      transition: opacity 0.4s;
     }
     .overlay.open { opacity: 1; pointer-events: all; }
-
     .modal {
-      width: 100%; max-width: 720px;
-      background: rgba(8,20,34,0.95);
-      border: 1px solid rgba(0,255,148,0.25);
-      border-radius: 20px;
-      padding: clamp(1.5rem, 4vw, 2.5rem);
+      width: 100%; max-width: 780px;
+      background: rgba(8,18,32,0.98);
+      border: 1px solid rgba(0,255,148,0.2);
+      border-radius: 24px;
+      padding: clamp(1.5rem, 4vw, 3rem);
       position: relative;
-      box-shadow: 0 0 80px rgba(0,255,148,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
       max-height: 90vh; overflow-y: auto;
     }
     .modal::-webkit-scrollbar { width: 2px; }
     .modal::-webkit-scrollbar-thumb { background: var(--green); }
-
     .modal-close {
-      position: absolute; top: 1.1rem; right: 1.1rem;
+      position: absolute; top: 1.2rem; right: 1.2rem;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
-      color: var(--dim);
-      width: 34px; height: 34px; border-radius: 50%;
-      cursor: pointer; font-size: 1rem;
+      color: rgba(255,255,255,0.4);
+      width: 36px; height: 36px; border-radius: 50%;
+      cursor: none; font-size: 1rem;
       display: flex; align-items: center; justify-content: center;
       transition: all 0.25s;
     }
-    .modal-close:hover { border-color: var(--green); color: var(--green); background: rgba(0,255,148,0.05); }
-
+    .modal-close:hover { border-color: var(--green); color: var(--green); }
     .modal-title {
-      font-family: var(--font-hd);
-      font-size: clamp(1.3rem, 3vw, 2rem);
-      font-weight: 900; letter-spacing: 0.2em;
-      color: var(--green);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      letter-spacing: 0.1em; color: var(--green);
       margin-bottom: 0.3rem;
     }
     .modal-sub {
       font-size: 0.72rem; letter-spacing: 0.25em;
       color: var(--dim); text-transform: uppercase;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
-
     .svc-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 0.9rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
     }
-    .svc {
-      background: rgba(0,255,148,0.03);
-      border: 1px solid rgba(0,255,148,0.1);
-      border-radius: 12px;
-      padding: 1.1rem;
-      transition: all 0.3s;
-    }
-    .svc:hover {
-      background: rgba(0,255,148,0.07);
-      border-color: rgba(0,255,148,0.35);
-      transform: translateY(-2px);
-    }
-    .svc-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .svc-name {
-      font-family: var(--font-hd);
-      font-size: 0.58rem; font-weight: 700;
-      letter-spacing: 0.15em; color: var(--green);
-      margin-bottom: 0.4rem;
-    }
-    .svc-desc { font-size: 0.68rem; color: var(--dim); line-height: 1.55; }
+    .svc { background: rgba(0,255,148,0.03); border: 1px solid rgba(0,255,148,0.1); border-radius: 14px; padding: 1.2rem; transition: all 0.3s; }
+    .svc:hover { background: rgba(0,255,148,0.08); border-color: rgba(0,255,148,0.3); transform: translateY(-3px); }
+    .svc-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+    .svc-name { font-family: 'Orbitron', monospace; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.15em; color: var(--green); margin-bottom: 0.4rem; }
+    .svc-desc { font-size: 0.68rem; color: rgba(255,255,255,0.35); line-height: 1.55; }
 
-    /* ── CONTACT SECTION ─────────────────────────────────── */
-    #contact {
-      position: relative; z-index: 10;
-      min-height: 60vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 7rem 2rem 5rem;
-      background: linear-gradient(to bottom, var(--bg) 0%, #050C1B 100%);
-    }
-
-    .ct-title {
-      font-family: var(--font-hd);
-      font-size: clamp(1.4rem, 4vw, 2.8rem);
-      font-weight: 900; letter-spacing: 0.3em;
-      text-align: center; margin-bottom: 3rem;
-    }
-    .ct-title span { color: var(--cyan); }
-
-    .ct-links {
-      display: flex; gap: 1.5rem;
-      flex-wrap: wrap; justify-content: center;
-    }
-    .ct-link {
-      display: flex; align-items: center; gap: 1rem;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 16px;
-      padding: 1.1rem 1.8rem;
-      text-decoration: none; color: var(--text);
-      transition: all 0.3s;
-    }
-    .ct-link:hover {
-      border-color: var(--cyan);
-      background: rgba(0,229,255,0.04);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 36px rgba(0,229,255,0.08);
-    }
-    .ct-icon { font-size: 1.4rem; }
-    .ct-name { font-weight: 600; font-size: 0.9rem; }
-    .ct-handle { font-size: 0.72rem; color: var(--dim); margin-top: 2px; }
-
-    /* ── FOOTER ─────────────────────────────────────────── */
-    footer {
-      text-align: center; padding: 1.8rem;
-      border-top: 1px solid rgba(255,255,255,0.04);
-      font-size: 0.65rem; letter-spacing: 0.3em;
-      color: var(--dim);
-    }
+    /* ── REVEAL ANIMATION CLASSES ── */
+    .reveal { opacity: 0; transform: translateY(50px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-60px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal-left.in { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(60px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal-right.in { opacity: 1; transform: translateX(0); }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+    .delay-5 { transition-delay: 0.5s; }
+    .delay-6 { transition-delay: 0.6s; }
   </style>
 </head>
 <body>
 
-<!-- ──────── LOADER ──────── -->
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Loader -->
 <div id="loader">
-  <div class="loader-mark">
-    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="lg" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#00E5FF"/>
-          <stop offset="100%" stop-color="#00FF94"/>
-        </linearGradient>
-        <filter id="gf"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-      <!-- D -->
-      <path d="M8 16 L8 64 L30 64 Q52 64 52 40 Q52 16 30 16 Z" stroke="url(#lg)" stroke-width="2.5" fill="none" filter="url(#gf)"/>
-      <path d="M14 24 L14 56 L29 56 Q42 56 42 40 Q42 24 29 24 Z" fill="url(#lg)" opacity="0.1"/>
-      <!-- B -->
-      <path d="M58 16 L58 64" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round" filter="url(#gf)"/>
-      <path d="M58 16 L68 16 Q78 16 78 26 Q78 36 68 36 L58 36" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#gf)"/>
-      <path d="M58 36 L70 36 Q82 36 82 50 Q82 64 70 64 L58 64" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#gf)"/>
-    </svg>
-  </div>
-  <div class="loader-text" id="loader-text">BOOTING DB SYSTEM</div>
-  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="ld-logo">DB</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+  <div class="ld-text" id="ld-msg">INITIALIZING</div>
 </div>
 
-<!-- ──────── AMBIENT CANVAS ──────── -->
+<!-- Ambient canvas -->
 <canvas id="bg-canvas"></canvas>
 
-<!-- ──────── NAV ──────── -->
-<nav id="nav">
-  <div class="nav-logo">
-    <svg viewBox="0 0 80 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="nlg" x1="0" y1="0" x2="80" y2="48" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#00E5FF"/>
-          <stop offset="100%" stop-color="#00FF94"/>
-        </linearGradient>
-        <filter id="ngf"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-      <!-- D -->
-      <path d="M4 6 L4 42 L22 42 Q38 42 38 24 Q38 6 22 6 Z" stroke="url(#nlg)" stroke-width="2" fill="none" filter="url(#ngf)"/>
-      <path d="M9 11 L9 37 L22 37 Q31 37 31 24 Q31 11 22 11 Z" fill="url(#nlg)" opacity="0.08"/>
-      <!-- B -->
-      <path d="M44 6 L44 42" stroke="url(#nlg)" stroke-width="2" stroke-linecap="round" filter="url(#ngf)"/>
-      <path d="M44 6 L56 6 Q66 6 66 15 Q66 24 56 24 L44 24" stroke="url(#nlg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#ngf)"/>
-      <path d="M44 24 L58 24 Q70 24 70 33 Q70 42 58 42 L44 42" stroke="url(#nlg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#ngf)"/>
-    </svg>
-  </div>
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">DB</div>
   <div class="lang-pill">
     <button class="lbtn on" onclick="setLang('en')" id="btn-en">EN</button>
     <button class="lbtn"    onclick="setLang('de')" id="btn-de">DE</button>
   </div>
 </nav>
 
-<!-- ──────── HERO ──────── -->
-<section id="hero">
-  <div class="hero-sticky" id="hero-sticky">
+<!-- ══ HERO ══ -->
+<section id="s-hero">
+  <div class="bg-word w1" aria-hidden="true">SA</div>
+  <div class="bg-word w2" aria-hidden="true">BI</div>
 
-    <!-- Neural canvas -->
-    <canvas id="nc"></canvas>
-
-    <!-- Phase texts -->
-    <div class="phase-txt" id="pt1">INITIALIZING NEURAL NETWORK</div>
-    <div class="phase-txt" id="pt2">MAPPING COGNITIVE ARCHITECTURE</div>
-    <div class="phase-txt" id="pt3">DEPLOYING NEURAL PATHWAYS</div>
-
-    <!-- Portrait -->
-    <div class="portrait" id="portrait">
-      <div class="p-ring-wrap">
-        <div class="p-ring"></div>
-        <div class="p-ring"></div>
-        <div class="p-ring"></div>
-        <img id="portrait-img" src="./sabi.png" alt="Sabi" loading="eager"/>
-      </div>
-      <h1 class="hero-name" id="h-name">S<span class="c">A</span>BI</h1>
-      <p  class="hero-tag"  id="h-tag">BUILDER · INNOVATOR · DB</p>
+  <div class="hero-center">
+    <div class="photo-frame" id="photo-frame">
+      <div class="photo-glow"></div>
+      <div class="orbit"></div>
+      <div class="orbit2"></div>
+      <img id="portrait-img" src="./sabi.png" alt="Sabi">
     </div>
-
-    <!-- Endpoint nodes (desktop) -->
-    <!-- Restopos -->
-    <div class="node n-resto" id="n-resto" style="top:18%;right:9%">
-      <div class="ni" onclick="openModal()">
-        <div class="nl"><span class="dot"></span>RESTOPOS</div>
-        <div class="ns" id="ns-resto">Saudi-Compliant POS System ↗</div>
-      </div>
+    <div>
+      <h1 class="hero-name"><span class="grad" id="h-name">SABI</span></h1>
+      <p class="hero-role" id="h-role">BUILDER · INNOVATOR · DB</p>
     </div>
+  </div>
 
-    <!-- GitHub projects -->
-    <div class="node" id="n-g1" style="top:12%;left:8%">
-      <div class="ni" onclick="window.open('https://github.com/sabidb/restopos-zatca-updated','_blank')">
-        <div class="nl"><span class="dot"></span>RESTOPOS ZATCA</div>
-        <div class="ns">ZATCA Integration Engine</div>
-      </div>
-    </div>
-
-    <div class="node" id="n-g2" style="top:34%;left:5%">
-      <div class="ni" onclick="window.open('https://github.com/sabidb/broast-albahr','_blank')">
-        <div class="nl"><span class="dot"></span>BROAST AL-BAHR</div>
-        <div class="ns">Restaurant Platform</div>
-      </div>
-    </div>
-
-    <div class="node" id="n-g3" style="top:58%;left:6%">
-      <div class="ni" onclick="window.open('https://github.com/sabidb/Class12-mathAI-','_blank')">
-        <div class="nl"><span class="dot"></span>CLASS 12 MATH AI</div>
-        <div class="ns">AI-Integrated Math</div>
-      </div>
-    </div>
-
-    <div class="node" id="n-g4" style="top:55%;right:8%">
-      <div class="ni" onclick="window.open('https://github.com/sabidb/Al-bahr-admin','_blank')">
-        <div class="nl"><span class="dot"></span>AL-BAHR ADMIN</div>
-        <div class="ns">Admin Dashboard</div>
-      </div>
-    </div>
-
-    <div class="node" id="n-g5" style="top:74%;right:7%">
-      <div class="ni" onclick="window.open('https://github.com/sabidb/baloot-almamlaka-latest','_blank')">
-        <div class="nl"><span class="dot"></span>BALOOT AL-MAMLAKA</div>
-        <div class="ns">Kingdom Card Game</div>
-      </div>
-    </div>
-
-    <!-- Contact -->
-    <div class="node n-contact" id="n-contact" style="bottom:14%;left:50%;transform:translateX(-50%) scale(0)">
-      <div class="ni" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
-        <div class="nl"><span class="dot"></span><span id="n-conn-lbl">CONNECT</span></div>
-        <div class="ns">@heis.sabi · sabiidb7@gmail.com</div>
-      </div>
-    </div>
-
-    <!-- Scroll cue -->
-    <div class="scroll-cue" id="scroll-cue">
-      <div class="sc-label" id="sc-lbl">SCROLL</div>
-      <div class="sc-line"></div>
-    </div>
-
+  <div class="scroll-line">
+    <span class="sl-label" id="sl-lbl">SCROLL</span>
+    <div class="sl-track"></div>
   </div>
 </section>
 
-<!-- ──────── MOBILE NODES ──────── -->
-<div id="mobile-nodes">
-  <div class="mob-node resto" onclick="openModal()">
-    <div class="mob-label">RESTOPOS</div>
-    <div class="mob-sub" id="mn-resto">Saudi-Compliant POS System — tap to explore</div>
+<!-- ══ ABOUT ══ -->
+<section id="s-about">
+  <div class="about-left">
+    <div class="section-eye reveal">IDENTITY</div>
+    <h2 class="about-headline reveal delay-1">
+      THE<br><span class="accent">MIND</span><br>BEHIND DB
+    </h2>
+    <p class="about-body reveal delay-2" id="about-body">
+      Builder, innovator, and founder of DB — a personal brand pushing the limits of what technology can create. Based in Saudi Arabia, shipping products that matter.
+    </p>
   </div>
-  <div class="mob-node" onclick="window.open('https://github.com/sabidb/restopos-zatca-updated','_blank')">
-    <div class="mob-label">RESTOPOS ZATCA</div>
-    <div class="mob-sub">ZATCA Integration Engine</div>
+  <div class="about-right">
+    <div class="stat-row reveal delay-1">
+      <span class="stat-num">01</span>
+      <span class="stat-desc" id="st1">Restopos — Saudi-Compliant POS System</span>
+    </div>
+    <div class="stat-row reveal delay-2">
+      <span class="stat-num">05</span>
+      <span class="stat-desc" id="st2">Active GitHub projects shipping right now</span>
+    </div>
+    <div class="stat-row reveal delay-3">
+      <span class="stat-num">∞</span>
+      <span class="stat-desc" id="st3">Ideas queued. Systems building.</span>
+    </div>
   </div>
-  <div class="mob-node" onclick="window.open('https://github.com/sabidb/broast-albahr','_blank')">
-    <div class="mob-label">BROAST AL-BAHR</div>
-    <div class="mob-sub">Restaurant Platform</div>
-  </div>
-  <div class="mob-node" onclick="window.open('https://github.com/sabidb/Class12-mathAI-','_blank')">
-    <div class="mob-label">CLASS 12 MATH AI</div>
-    <div class="mob-sub">AI-Integrated Math</div>
-  </div>
-  <div class="mob-node" onclick="window.open('https://github.com/sabidb/Al-bahr-admin','_blank')">
-    <div class="mob-label">AL-BAHR ADMIN</div>
-    <div class="mob-sub">Admin Dashboard</div>
-  </div>
-  <div class="mob-node" onclick="window.open('https://github.com/sabidb/baloot-almamlaka-latest','_blank')">
-    <div class="mob-label">BALOOT AL-MAMLAKA</div>
-    <div class="mob-sub">Kingdom Card Game</div>
-  </div>
-</div>
+</section>
 
-<!-- ──────── CONTACT ──────── -->
-<section id="contact">
-  <h2 class="ct-title"><span>GET IN </span><span>TOUCH</span></h2>
-  <div class="ct-links">
-    <a href="https://instagram.com/heis.sabi" target="_blank" class="ct-link">
-      <span class="ct-icon">📸</span>
-      <div><div class="ct-name">Instagram</div><div class="ct-handle">@heis.sabi</div></div>
+<!-- ══ RESTOPOS ══ -->
+<section id="s-restopos">
+  <div class="resto-bg-text" aria-hidden="true">POS</div>
+  <div class="resto-content">
+    <div class="resto-left">
+      <div class="section-eye reveal">FLAGSHIP PRODUCT</div>
+      <h2 class="resto-title reveal delay-1">
+        RESTO<br><span>POS</span>
+      </h2>
+      <p class="resto-subtitle reveal delay-2" id="resto-sub">
+        The complete restaurant management system built for Saudi Arabia. ZATCA-compliant, Arabic-first, and built to handle real operations at scale.
+      </p>
+      <div class="reveal delay-3">
+        <button class="cta-btn" onclick="openModal()">
+          <span id="cta-lbl">EXPLORE SYSTEM</span>
+          <span class="cta-arrow">→</span>
+        </button>
+      </div>
+    </div>
+    <div class="resto-right">
+      <div class="svc-card reveal delay-1">
+        <div class="svc-ico">🇸🇦</div>
+        <div class="svc-nm">ZATCA READY</div>
+        <div class="svc-dc">Phase 1 & 2 Saudi tax authority integration</div>
+      </div>
+      <div class="svc-card reveal delay-2">
+        <div class="svc-ico">🖥️</div>
+        <div class="svc-nm">POS CORE</div>
+        <div class="svc-dc">Arabic-first point of sale, blazing fast</div>
+      </div>
+      <div class="svc-card reveal delay-3">
+        <div class="svc-ico">📊</div>
+        <div class="svc-nm">ANALYTICS</div>
+        <div class="svc-dc">Revenue insights and sales forecasting</div>
+      </div>
+      <div class="svc-card reveal delay-4">
+        <div class="svc-ico">📱</div>
+        <div class="svc-nm">CROSS-PLATFORM</div>
+        <div class="svc-dc">iOS, Android, and Windows — one codebase</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROJECTS ══ -->
+<section id="s-projects">
+  <div class="section-header">
+    <div class="section-eye reveal">GITHUB</div>
+    <h2 class="section-title reveal delay-1">ACTIVE <span class="accent">BUILDS</span></h2>
+  </div>
+  <div class="projects-track">
+    <a class="proj-card reveal delay-1" href="https://github.com/sabidb/restopos-zatca-updated" target="_blank">
+      <div class="proj-num">001</div>
+      <div class="proj-name">RESTOPOS ZATCA</div>
+      <div class="proj-lang">JavaScript</div>
+      <div class="proj-link">VIEW PROJECT →</div>
     </a>
-    <a href="mailto:sabiidb7@gmail.com" class="ct-link">
-      <span class="ct-icon">✉️</span>
-      <div><div class="ct-name">Email</div><div class="ct-handle">sabiidb7@gmail.com</div></div>
+    <a class="proj-card reveal delay-2" href="https://github.com/sabidb/broast-albahr" target="_blank">
+      <div class="proj-num">002</div>
+      <div class="proj-name">BROAST AL-BAHR</div>
+      <div class="proj-lang">HTML</div>
+      <div class="proj-link">VIEW PROJECT →</div>
     </a>
-    <a href="https://github.com/sabidb" target="_blank" class="ct-link">
-      <span class="ct-icon">⚡</span>
-      <div><div class="ct-name">GitHub</div><div class="ct-handle">sabidb</div></div>
+    <a class="proj-card reveal delay-3" href="https://github.com/sabidb/Class12-mathAI-" target="_blank">
+      <div class="proj-num">003</div>
+      <div class="proj-name">CLASS 12 MATH AI</div>
+      <div class="proj-lang">HTML · AI</div>
+      <div class="proj-link">VIEW PROJECT →</div>
+    </a>
+    <a class="proj-card reveal delay-4" href="https://github.com/sabidb/Al-bahr-admin" target="_blank">
+      <div class="proj-num">004</div>
+      <div class="proj-name">AL-BAHR ADMIN</div>
+      <div class="proj-lang">HTML</div>
+      <div class="proj-link">VIEW PROJECT →</div>
+    </a>
+    <a class="proj-card reveal delay-5" href="https://github.com/sabidb/baloot-almamlaka-latest" target="_blank">
+      <div class="proj-num">005</div>
+      <div class="proj-name">BALOOT AL-MAMLAKA</div>
+      <div class="proj-lang">JavaScript</div>
+      <div class="proj-link">VIEW PROJECT →</div>
+    </a>
+    <div class="proj-card reveal delay-6" style="border-style:dashed; cursor:default; opacity:0.35;">
+      <div class="proj-num">00+</div>
+      <div class="proj-name">MORE COMING</div>
+      <div class="proj-lang">ALWAYS BUILDING</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="s-contact">
+  <div class="contact-bg"></div>
+  <div class="contact-label reveal" id="ct-lbl">LET'S BUILD SOMETHING</div>
+  <h2 class="contact-big reveal delay-1" id="ct-big">GET IN<br>TOUCH</h2>
+  <div class="social-row">
+    <a class="soc-link reveal delay-2" href="https://instagram.com/heis.sabi" target="_blank">
+      <span class="soc-ico">📸</span>
+      <div>
+        <div>Instagram</div>
+        <div class="soc-handle">@heis.sabi</div>
+      </div>
+    </a>
+    <a class="soc-link reveal delay-3" href="mailto:sabiidb7@gmail.com">
+      <span class="soc-ico">✉️</span>
+      <div>
+        <div>Email</div>
+        <div class="soc-handle">sabiidb7@gmail.com</div>
+      </div>
+    </a>
+    <a class="soc-link reveal delay-4" href="https://github.com/sabidb" target="_blank">
+      <span class="soc-ico">⚡</span>
+      <div>
+        <div>GitHub</div>
+        <div class="soc-handle">sabidb</div>
+      </div>
     </a>
   </div>
 </section>
 
-<footer id="footer-txt">© 2026 SABI · DB · ALL SYSTEMS ACTIVE</footer>
+<footer id="ft">© 2026 SABI · DB · ALL SYSTEMS ACTIVE</footer>
 
-<!-- ──────── RESTOPOS MODAL ──────── -->
+<!-- ══ RESTOPOS MODAL ══ -->
 <div class="overlay" id="overlay" onclick="overlayClick(event)">
   <div class="modal" id="modal">
-    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-title">RESTOPOS</div>
     <div class="modal-sub" id="mod-sub">Saudi-Compliant Restaurant Management System</div>
     <div class="svc-grid">
-      <div class="svc"><div class="svc-icon">🇸🇦</div><div class="svc-name">ZATCA COMPLIANCE</div><div class="svc-desc">Full Saudi tax authority e-invoicing integration, Phase 1 & 2 ready</div></div>
-      <div class="svc"><div class="svc-icon">🖥️</div><div class="svc-name">POS SYSTEM</div><div class="svc-desc">Fast, Arabic-first point-of-sale for dine-in, takeaway, and delivery</div></div>
-      <div class="svc"><div class="svc-icon">📋</div><div class="svc-name">MENU MANAGEMENT</div><div class="svc-desc">Dynamic menus with real-time pricing, categories, and availability</div></div>
-      <div class="svc"><div class="svc-icon">📊</div><div class="svc-name">ANALYTICS</div><div class="svc-desc">Revenue insights, peak-hour tracking, and sales forecasting</div></div>
-      <div class="svc"><div class="svc-icon">👥</div><div class="svc-name">STAFF & SHIFTS</div><div class="svc-desc">Role-based access, shift scheduling, and permission management</div></div>
-      <div class="svc"><div class="svc-icon">📱</div><div class="svc-name">MOBILE & DESKTOP</div><div class="svc-desc">Cross-platform: iOS, Android, Windows apps from one codebase</div></div>
-      <div class="svc"><div class="svc-icon">🍳</div><div class="svc-name">KITCHEN DISPLAY</div><div class="svc-desc">Real-time order queue and ticket management for kitchen staff</div></div>
-      <div class="svc"><div class="svc-icon">🔗</div><div class="svc-name">DELIVERY INTEGRATIONS</div><div class="svc-desc">Hungerstation, Jahez, Mrsool — unified order management</div></div>
+      <div class="svc"><div class="svc-icon">🇸🇦</div><div class="svc-name">ZATCA COMPLIANCE</div><div class="svc-desc">Full Saudi tax authority e-invoicing, Phase 1 & 2 ready</div></div>
+      <div class="svc"><div class="svc-icon">🖥️</div><div class="svc-name">POS SYSTEM</div><div class="svc-desc">Fast Arabic-first point-of-sale for dine-in & delivery</div></div>
+      <div class="svc"><div class="svc-icon">📋</div><div class="svc-name">MENU MANAGEMENT</div><div class="svc-desc">Dynamic menus, real-time pricing and availability</div></div>
+      <div class="svc"><div class="svc-icon">📊</div><div class="svc-name">ANALYTICS</div><div class="svc-desc">Revenue insights, peak hours, sales forecasting</div></div>
+      <div class="svc"><div class="svc-icon">👥</div><div class="svc-name">STAFF & SHIFTS</div><div class="svc-desc">Role-based access, shift scheduling, permissions</div></div>
+      <div class="svc"><div class="svc-icon">📱</div><div class="svc-name">MOBILE & DESKTOP</div><div class="svc-desc">iOS, Android, Windows — one unified system</div></div>
+      <div class="svc"><div class="svc-icon">🍳</div><div class="svc-name">KITCHEN DISPLAY</div><div class="svc-desc">Real-time order queue for kitchen operations</div></div>
+      <div class="svc"><div class="svc-icon">🔗</div><div class="svc-name">DELIVERY PLATFORMS</div><div class="svc-desc">Hungerstation, Jahez, Mrsool integrated</div></div>
     </div>
   </div>
 </div>
 
-<!-- ──────── GSAP ──────── -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
-
 <script>
-// ══════════════════════════════════════════════════════════
-//  LANGUAGE
-// ══════════════════════════════════════════════════════════
+// ── CURSOR ──────────────────────────────────────────────
+const cur  = document.getElementById('cursor');
+const curR = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+(function cursorLoop() {
+  cur.style.left  = mx + 'px';
+  cur.style.top   = my + 'px';
+  rx += (mx - rx) * 0.14;
+  ry += (my - ry) * 0.14;
+  curR.style.left = rx + 'px';
+  curR.style.top  = ry + 'px';
+  requestAnimationFrame(cursorLoop);
+})();
+
+document.querySelectorAll('a, button, .proj-card, .svc-card, .cta-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cur.style.transform  = 'translate(-50%,-50%) scale(2.5)';
+    curR.style.transform = 'translate(-50%,-50%) scale(1.6)';
+    curR.style.opacity   = '0.3';
+  });
+  el.addEventListener('mouseleave', () => {
+    cur.style.transform  = 'translate(-50%,-50%) scale(1)';
+    curR.style.transform = 'translate(-50%,-50%) scale(1)';
+    curR.style.opacity   = '1';
+  });
+});
+
+// ── LANGUAGE ─────────────────────────────────────────────
 const T = {
   en: {
-    'h-tag':      'BUILDER · INNOVATOR · DB',
-    'pt1':        'INITIALIZING NEURAL NETWORK',
-    'pt2':        'MAPPING COGNITIVE ARCHITECTURE',
-    'pt3':        'DEPLOYING NEURAL PATHWAYS',
-    'sc-lbl':     'SCROLL',
-    'ns-resto':   'Saudi-Compliant POS System ↗',
-    'n-conn-lbl': 'CONNECT',
-    'mod-sub':    'Saudi-Compliant Restaurant Management System',
-    'mn-resto':   'Saudi-Compliant POS System — tap to explore',
-    'footer-txt': '© 2026 SABI · DB · ALL SYSTEMS ACTIVE',
+    'h-role':      'BUILDER · INNOVATOR · DB',
+    'sl-lbl':      'SCROLL',
+    'about-body':  'Builder, innovator, and founder of DB — a personal brand pushing the limits of what technology can create. Based in Saudi Arabia, shipping products that matter.',
+    'st1':         'Restopos — Saudi-Compliant POS System',
+    'st2':         'Active GitHub projects shipping right now',
+    'st3':         'Ideas queued. Systems building.',
+    'resto-sub':   'The complete restaurant management system built for Saudi Arabia. ZATCA-compliant, Arabic-first, and built to handle real operations at scale.',
+    'cta-lbl':     'EXPLORE SYSTEM',
+    'ct-lbl':      "LET'S BUILD SOMETHING",
+    'ct-big':      'GET IN\nTOUCH',
+    'mod-sub':     'Saudi-Compliant Restaurant Management System',
+    'ft':          '© 2026 SABI · DB · ALL SYSTEMS ACTIVE',
   },
   de: {
-    'h-tag':      'ENTWICKLER · INNOVATOR · DB',
-    'pt1':        'NEURONALES NETZWERK INITIALISIEREN',
-    'pt2':        'KOGNITIVE ARCHITEKTUR KARTIEREN',
-    'pt3':        'NEURALE PFADE EINSETZEN',
-    'sc-lbl':     'SCROLLEN',
-    'ns-resto':   'Saudi-konformes Kassensystem ↗',
-    'n-conn-lbl': 'KONTAKT',
-    'mod-sub':    'Saudi-konformes Restaurant-Management-System',
-    'mn-resto':   'Saudi-konformes Kassensystem — Tippen zum Erkunden',
-    'footer-txt': '© 2026 SABI · DB · ALLE SYSTEME AKTIV',
+    'h-role':      'ENTWICKLER · INNOVATOR · DB',
+    'sl-lbl':      'SCROLLEN',
+    'about-body':  'Entwickler, Innovator und Gründer von DB — eine persönliche Marke, die die Grenzen der Technologie neu definiert. Ansässig in Saudi-Arabien.',
+    'st1':         'Restopos — Saudi-konformes Kassensystem',
+    'st2':         'Aktive GitHub-Projekte in Entwicklung',
+    'st3':         'Ideen in der Warteschlange. Systeme im Aufbau.',
+    'resto-sub':   'Das komplette Restaurant-Management-System für Saudi-Arabien. ZATCA-konform, arabisch-first, für den echten Betrieb.',
+    'cta-lbl':     'SYSTEM ERKUNDEN',
+    'ct-lbl':      'LASS UNS BAUEN',
+    'ct-big':      'KONTAKT\nAUFNEHMEN',
+    'mod-sub':     'Saudi-konformes Restaurant-Management-System',
+    'ft':          '© 2026 SABI · DB · ALLE SYSTEME AKTIV',
   }
 };
-
 let lang = 'en';
 function setLang(l) {
   lang = l;
@@ -728,356 +932,95 @@ function setLang(l) {
   document.getElementById('btn-de').classList.toggle('on', l === 'de');
 }
 
-// ══════════════════════════════════════════════════════════
-//  AMBIENT BG CANVAS
-// ══════════════════════════════════════════════════════════
-(function ambientBg() {
-  const cvs = document.getElementById('bg-canvas');
-  const ctx = cvs.getContext('2d');
+// ── AMBIENT CANVAS ────────────────────────────────────────
+(function bg() {
+  const c   = document.getElementById('bg-canvas');
+  const ctx = c.getContext('2d');
   let W, H;
+  function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
+  resize(); addEventListener('resize', resize);
 
-  function resize() {
-    W = cvs.width  = window.innerWidth;
-    H = cvs.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  // Stars / drifting particles
-  const COUNT = 200;
-  const pts = Array.from({ length: COUNT }, () => ({
-    x: Math.random() * 2000,
-    y: Math.random() * 1200,
-    r: Math.random() * 1.2 + 0.2,
-    vx: (Math.random() - 0.5) * 0.12,
-    vy: -(Math.random() * 0.25 + 0.04),
-    a: Math.random() * 0.5 + 0.1,
+  const pts = Array.from({ length: 160 }, () => ({
+    x:  Math.random() * 1920,
+    y:  Math.random() * 1080,
+    r:  Math.random() * 1.1 + 0.2,
+    vy: -(Math.random() * 0.2 + 0.04),
+    vx: (Math.random() - 0.5) * 0.08,
+    a:  Math.random() * 0.45 + 0.08,
     ph: Math.random() * Math.PI * 2,
   }));
 
-  // Subtle nebula gradients (static)
-  function drawNebula() {
-    const g1 = ctx.createRadialGradient(W*.25, H*.35, 0, W*.25, H*.35, W*.35);
-    g1.addColorStop(0, 'rgba(0,80,130,0.06)');
-    g1.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
-
-    const g2 = ctx.createRadialGradient(W*.78, H*.65, 0, W*.78, H*.65, W*.3);
-    g2.addColorStop(0, 'rgba(0,180,100,0.04)');
-    g2.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
-  }
-
-  let t = 0;
   function frame() {
     ctx.clearRect(0, 0, W, H);
-    drawNebula();
-    t += 0.01;
+
+    // Subtle glow spots
+    const g = ctx.createRadialGradient(W*.3, H*.4, 0, W*.3, H*.4, W*.4);
+    g.addColorStop(0, 'rgba(0,80,140,0.04)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
     pts.forEach(p => {
-      p.ph += 0.012;
-      p.x  += p.vx;
-      p.y  += p.vy;
-      if (p.y < -4) { p.y = H + 4; p.x = Math.random() * W; }
-      if (p.x < 0)  { p.x = W; }
-      if (p.x > W)  { p.x = 0; }
-
-      const alpha = p.a * (0.65 + 0.35 * Math.sin(p.ph));
+      p.ph += 0.015; p.y += p.vy; p.x += p.vx;
+      if (p.y < -2) { p.y = H + 2; p.x = Math.random() * W; }
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      const a = p.a * (0.6 + 0.4 * Math.sin(p.ph));
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0,229,255,${alpha})`;
+      ctx.fillStyle = `rgba(0,229,255,${a})`;
       ctx.fill();
     });
-
     requestAnimationFrame(frame);
   }
   frame();
 })();
 
-// ══════════════════════════════════════════════════════════
-//  NEURAL CANVAS  (brain → wires animation)
-// ══════════════════════════════════════════════════════════
-let nc, nctx, NW, NH;
-let scrollProg = 0;
-let rafId;
+// ── TILT ON MOUSEMOVE (hero photo) ───────────────────────
+const frame = document.getElementById('photo-frame');
+document.getElementById('s-hero').addEventListener('mousemove', e => {
+  const rect = frame.getBoundingClientRect();
+  const cx   = rect.left + rect.width  / 2;
+  const cy   = rect.top  + rect.height / 2;
+  const rx   = (e.clientY - cy) / window.innerHeight * 14;
+  const ry   = (e.clientX - cx) / window.innerWidth  * -14;
+  frame.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.03)`;
+  frame.style.transition = 'transform 0.1s';
+});
+document.getElementById('s-hero').addEventListener('mouseleave', () => {
+  frame.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+  frame.style.transition = 'transform 0.6s ease';
+});
 
-const neurons  = [];
-const wires    = [];
-const EP       = []; // endpoints matching node positions
-
-function neuronPos(cx, cy, R) {
-  // Points distributed inside a brain-like ellipse
-  for (let i = 0; i < 90; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const rx = R * (0.95 + 0.1 * Math.cos(angle * 2));
-    const ry = R * 0.72;
-    const r  = Math.sqrt(Math.random()); // uniform in disk
-    neurons.push({
-      x:  cx + Math.cos(angle) * r * rx,
-      y:  cy + Math.sin(angle) * r * ry,
-      bx: 0, by: 0,
-      size: Math.random() * 2.8 + 0.8,
-      ph:   Math.random() * Math.PI * 2,
-    });
-  }
-  neurons.forEach(n => { n.bx = n.x; n.by = n.y; });
-}
-
-function buildWires() {
-  EP.forEach((ep, ei) => {
-    for (let w = 0; w < 4; w++) {
-      const src = neurons[Math.floor(Math.random() * neurons.length)];
-      const mx  = (src.x + ep.x) / 2;
-      const my  = (src.y + ep.y) / 2;
-      const bend = 80 + Math.random() * 100;
-      const perp = { x: -(ep.y - src.y), y: ep.x - src.x };
-      const len  = Math.sqrt(perp.x * perp.x + perp.y * perp.y) || 1;
-      const dir  = (Math.random() > 0.5 ? 1 : -1) * (0.5 + Math.random());
-
-      wires.push({
-        sx: src.x, sy: src.y,
-        cpx: mx + (perp.x / len) * bend * dir,
-        cpy: my + (perp.y / len) * bend * dir,
-        ex: ep.x, ey: ep.y,
-        color: ep.color,
-        delay: ei * 0.06 + w * 0.015,
-      });
+// ── SCROLL REVEAL ─────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
     }
   });
-}
+}, { threshold: 0.12 });
 
-function qB(p0, p1, p2, t) {
-  const mt = 1 - t;
-  return mt * mt * p0 + 2 * mt * t * p1 + t * t * p2;
-}
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
 
-function drawNeural() {
-  nctx.clearRect(0, 0, NW, NH);
+// ── GSAP HERO PARALLAX ───────────────────────────────────
+gsap.registerPlugin(ScrollTrigger);
 
-  const p = scrollProg;
-  const brainAlpha = Math.min(p / 0.28, 1) * Math.max(1 - (p - 0.38) / 0.22, 0);
-  const wireAlpha  = Math.max((p - 0.55) / 0.45, 0);
+gsap.to('.bg-word.w1', {
+  y: '-25%',
+  scrollTrigger: { trigger: '#s-hero', start: 'top top', end: 'bottom top', scrub: true }
+});
+gsap.to('.bg-word.w2', {
+  y: '-18%',
+  scrollTrigger: { trigger: '#s-hero', start: 'top top', end: 'bottom top', scrub: true }
+});
+gsap.to('.hero-center', {
+  y: '-10%', opacity: 0.2,
+  scrollTrigger: { trigger: '#s-hero', start: 'top top', end: 'bottom top', scrub: true }
+});
 
-  // ── NEURONS + SYNAPSES ──
-  if (brainAlpha > 0.01) {
-    neurons.forEach((n, i) => {
-      n.ph += 0.018;
-      const g = 0.5 + 0.5 * Math.sin(n.ph);
-      const a = brainAlpha;
-
-      // Connections to nearby neurons
-      for (let j = i + 1; j < neurons.length; j++) {
-        const m  = neurons[j];
-        const dx = m.x - n.x, dy = m.y - n.y;
-        const d  = Math.sqrt(dx * dx + dy * dy);
-        if (d < 72) {
-          const str = (1 - d / 72) * a;
-          nctx.beginPath();
-          nctx.moveTo(n.x, n.y);
-          nctx.lineTo(m.x, m.y);
-          nctx.strokeStyle = `rgba(0,229,255,${str * 0.38})`;
-          nctx.lineWidth   = str * 1.2;
-          nctx.stroke();
-        }
-      }
-
-      // Neuron dot
-      const sz = n.size * (0.85 + 0.3 * g);
-      const grd = nctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, sz * 4);
-      grd.addColorStop(0, `rgba(0,229,255,${a * 0.55 * g})`);
-      grd.addColorStop(1, 'rgba(0,229,255,0)');
-      nctx.beginPath();
-      nctx.arc(n.x, n.y, sz * 4, 0, Math.PI * 2);
-      nctx.fillStyle = grd;
-      nctx.fill();
-
-      nctx.beginPath();
-      nctx.arc(n.x, n.y, sz, 0, Math.PI * 2);
-      nctx.fillStyle = `rgba(0,229,255,${a * (0.5 + 0.4 * g)})`;
-      nctx.fill();
-    });
-  }
-
-  // ── WIRES ──
-  if (wireAlpha > 0.001) {
-    wires.forEach(wire => {
-      const t = Math.min(Math.max((wireAlpha - wire.delay) / (1 - Math.min(wire.delay, 0.9)), 0), 1);
-      if (t <= 0) return;
-
-      const STEPS = 40;
-      const drawTo = Math.floor(STEPS * Math.min(t * 1.3, 1));
-
-      let clr;
-      if (wire.color === '#00FF94')  clr = [0, 255, 148];
-      else if (wire.color === '#a855f7') clr = [168, 85, 247];
-      else clr = [0, 229, 255];
-
-      // Draw wire segments
-      nctx.beginPath();
-      nctx.moveTo(wire.sx, wire.sy);
-      for (let s = 1; s <= drawTo; s++) {
-        const bt = s / STEPS;
-        nctx.lineTo(
-          qB(wire.sx, wire.cpx, wire.ex, bt),
-          qB(wire.sy, wire.cpy, wire.ey, bt)
-        );
-      }
-      const alpha = Math.min(t * 2, 0.75);
-      nctx.strokeStyle = `rgba(${clr[0]},${clr[1]},${clr[2]},${alpha})`;
-      nctx.lineWidth   = 1.4;
-      nctx.stroke();
-
-      // Traveling pulse
-      if (t > 0.05 && t < 0.95) {
-        const bt  = Math.min(t * 1.3, 1);
-        const px  = qB(wire.sx, wire.cpx, wire.ex, bt);
-        const py  = qB(wire.sy, wire.cpy, wire.ey, bt);
-
-        const grd = nctx.createRadialGradient(px, py, 0, px, py, 14);
-        grd.addColorStop(0, `rgba(${clr[0]},${clr[1]},${clr[2]},0.5)`);
-        grd.addColorStop(1, 'rgba(0,0,0,0)');
-        nctx.beginPath();
-        nctx.arc(px, py, 14, 0, Math.PI * 2);
-        nctx.fillStyle = grd;
-        nctx.fill();
-
-        nctx.beginPath();
-        nctx.arc(px, py, 3, 0, Math.PI * 2);
-        nctx.fillStyle = `rgba(${clr[0]},${clr[1]},${clr[2]},0.95)`;
-        nctx.fill();
-      }
-    });
-  }
-
-  rafId = requestAnimationFrame(drawNeural);
-}
-
-function initNeuralCanvas() {
-  nc   = document.getElementById('nc');
-  nctx = nc.getContext('2d');
-  NW   = nc.width  = window.innerWidth;
-  NH   = nc.height = window.innerHeight;
-
-  const cx = NW / 2;
-  const cy = NH * 0.42;
-  const R  = Math.min(NW, NH) * 0.16;
-
-  neuronPos(cx, cy, R);
-
-  // Endpoint positions (must match node CSS positions)
-  EP.push(
-    { x: NW * 0.865, y: NH * 0.21,  color: '#00FF94' }, // restopos
-    { x: NW * 0.12,  y: NH * 0.15,  color: '#00E5FF' }, // gh1
-    { x: NW * 0.08,  y: NH * 0.37,  color: '#00E5FF' }, // gh2
-    { x: NW * 0.10,  y: NH * 0.60,  color: '#00E5FF' }, // gh3
-    { x: NW * 0.865, y: NH * 0.57,  color: '#00E5FF' }, // gh4
-    { x: NW * 0.86,  y: NH * 0.76,  color: '#00E5FF' }, // gh5
-    { x: NW * 0.50,  y: NH * 0.88,  color: '#a855f7' }, // contact
-  );
-
-  buildWires();
-  drawNeural();
-
-  window.addEventListener('resize', () => {
-    NW = nc.width  = window.innerWidth;
-    NH = nc.height = window.innerHeight;
-  });
-}
-
-// ══════════════════════════════════════════════════════════
-//  SCROLL ANIMATION
-// ══════════════════════════════════════════════════════════
-const NODES = ['n-resto','n-g1','n-g2','n-g3','n-g4','n-g5','n-contact'];
-const N_DELAY = [0, 0.04, 0.08, 0.12, 0.06, 0.1, 0.18];
-const N_IS_CONTACT = [false,false,false,false,false,false,true];
-
-function updateScroll(p) {
-  // ── Portrait opacity + filter ──
-  const img = document.getElementById('portrait-img');
-  if (p < 0.22) {
-    img.style.opacity = 1;
-    img.style.filter  = 'none';
-  } else if (p < 0.58) {
-    const t = (p - 0.22) / 0.36;
-    img.style.opacity = 1 - t * 0.88;
-    img.style.filter  = `hue-rotate(${t * 160}deg) brightness(${1 + t * 0.4}) saturate(${1 - t * 0.7})`;
-  } else {
-    img.style.opacity = 0.04;
-    img.style.filter  = 'hue-rotate(160deg) brightness(1.4) saturate(0.3)';
-  }
-
-  // ── Name / tagline ──
-  const fade = Math.max(1 - (p - 0.12) / 0.22, 0);
-  document.getElementById('h-name').style.opacity = fade;
-  document.getElementById('h-tag').style.opacity  = fade;
-  document.querySelectorAll('.p-ring').forEach(r => r.style.opacity = fade);
-
-  // ── Scroll cue ──
-  document.getElementById('scroll-cue').style.opacity = Math.max(1 - p / 0.1, 0);
-
-  // ── Phase texts ──
-  const showP1 = p > 0.08  && p < 0.35;
-  const showP2 = p > 0.35  && p < 0.54;
-  const showP3 = p > 0.54  && p < 0.74;
-  document.getElementById('pt1').style.opacity = showP1 ? 1 : 0;
-  document.getElementById('pt2').style.opacity = showP2 ? 1 : 0;
-  document.getElementById('pt3').style.opacity = showP3 ? 1 : 0;
-
-  // ── Endpoint nodes ──
-  NODES.forEach((id, i) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const showAt = 0.62 + N_DELAY[i];
-    const np     = Math.max(Math.min((p - showAt) / 0.1, 1), 0);
-    const s      = np < 0.001 ? 0 : 0.6 + 0.4 * np;
-    el.style.opacity = np;
-    if (N_IS_CONTACT[i]) {
-      el.style.transform = `translateX(-50%) scale(${s})`;
-    } else {
-      el.style.transform = `scale(${s})`;
-    }
-    if (np > 0.05) el.classList.add('show');
-    else           el.classList.remove('show');
-  });
-}
-
-function initScrollAnim() {
-  gsap.registerPlugin(ScrollTrigger);
-
-  // Initial portrait entrance
-  gsap.from('#portrait', { y: 70, opacity: 0, duration: 1.3, ease: 'power3.out', delay: 0.2 });
-  gsap.from('#h-name',   { y: 30, opacity: 0, duration: 1,   ease: 'power2.out', delay: 0.7 });
-  gsap.from('#h-tag',    { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 1.0 });
-
-  ScrollTrigger.create({
-    trigger:  '#hero',
-    start:    'top top',
-    end:      'bottom bottom',
-    scrub:    0.8,
-    onUpdate: self => {
-      scrollProg = self.progress;
-      updateScroll(self.progress);
-    },
-  });
-
-  // Contact section entrance
-  gsap.from('.ct-title', {
-    y: 40, opacity: 0, duration: 1, ease: 'power2.out',
-    scrollTrigger: { trigger: '#contact', start: 'top 80%' }
-  });
-  gsap.from('.ct-link', {
-    y: 30, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out',
-    scrollTrigger: { trigger: '#contact', start: 'top 70%' }
-  });
-}
-
-// ══════════════════════════════════════════════════════════
-//  MODAL
-// ══════════════════════════════════════════════════════════
+// ── MODAL ─────────────────────────────────────────────────
 function openModal() {
-  const ov = document.getElementById('overlay');
-  ov.classList.add('open');
-  gsap.from('#modal', { scale: 0.88, opacity: 0, duration: 0.45, ease: 'back.out(1.5)' });
+  document.getElementById('overlay').classList.add('open');
+  gsap.from('#modal', { scale: 0.9, opacity: 0, duration: 0.45, ease: 'back.out(1.5)' });
   document.body.style.overflow = 'hidden';
 }
 function closeModal() {
@@ -1089,42 +1032,37 @@ function overlayClick(e) {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// ══════════════════════════════════════════════════════════
-//  BOOT
-// ══════════════════════════════════════════════════════════
-const BOOT_MSGS = ['LOADING NEURAL CORE', 'CALIBRATING DB ENGINE', 'DEPLOYING SYSTEMS', 'READY'];
-let bIdx = 0;
-const loaderTxt = document.getElementById('loader-text');
-
-const bootInterval = setInterval(() => {
-  bIdx++;
-  if (bIdx < BOOT_MSGS.length) {
-    loaderTxt.textContent = BOOT_MSGS[bIdx];
-  } else {
-    clearInterval(bootInterval);
-  }
+// ── LOADER ────────────────────────────────────────────────
+const msgs = ['LOADING ASSETS', 'CALIBRATING UI', 'DEPLOYING SYSTEMS', 'WELCOME'];
+let mi = 0;
+const ldMsg = document.getElementById('ld-msg');
+const ldInt = setInterval(() => {
+  mi++;
+  if (mi < msgs.length) ldMsg.textContent = msgs[mi];
+  else clearInterval(ldInt);
 }, 420);
 
 window.addEventListener('load', () => {
   setTimeout(() => {
     gsap.to('#loader', {
-      opacity: 0, duration: 0.8, ease: 'power2.inOut',
+      opacity: 0, duration: 0.9, ease: 'power2.inOut',
       onComplete() {
         document.getElementById('loader').style.display = 'none';
-        initNeuralCanvas();
-        initScrollAnim();
+        // Hero entrance
+        gsap.from('.photo-frame', { scale: 0.7, opacity: 0, duration: 1.4, ease: 'power3.out', delay: 0.1 });
+        gsap.from('.hero-name',   { y: 40, opacity: 0, duration: 1.1, ease: 'power2.out', delay: 0.5 });
+        gsap.from('.hero-role',   { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.8 });
+        gsap.from('.bg-word.w1',  { x: -60, opacity: 0, duration: 1.5, ease: 'power2.out', delay: 0.2 });
+        gsap.from('.bg-word.w2',  { x: 60,  opacity: 0, duration: 1.5, ease: 'power2.out', delay: 0.3 });
+        gsap.from('.scroll-line', { opacity: 0, duration: 1, delay: 1.5 });
       }
     });
   }, 1900);
 });
 
-// ══════════════════════════════════════════════════════════
-//  REDUCED MOTION
-// ══════════════════════════════════════════════════════════
-if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  document.querySelectorAll('[style*="animation"]').forEach(el => {
-    el.style.animation = 'none';
-  });
+// ── REDUCED MOTION ────────────────────────────────────────
+if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.orbit,.orbit2,.photo-glow').forEach(e => e.style.animation = 'none');
 }
 </script>
 </body>
