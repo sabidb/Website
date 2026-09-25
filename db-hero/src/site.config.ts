@@ -19,20 +19,20 @@ export const brand = {
   // Short arabic-friendly tagline shown in the eyebrow.
   tagline: 'Restaurant Technology',
   taglineAr: 'تقنية المطاعم',
-  domain: (env.VITE_BRAND_DOMAIN as string) || 'restopos.sa',
+  domain: (env.VITE_BRAND_DOMAIN as string) || 'restopos.store',
   // Factual, non-fabricated trust points for the Saudi market.
   trust: ['Arabic & English', 'VAT-ready invoicing', 'Built for Saudi restaurants'],
 };
 
 export const contact = {
   // All configurable — set these in your deployment environment.
-  email: (env.VITE_CONTACT_EMAIL as string) || 'hello@restopos.sa',
-  phone: (env.VITE_CONTACT_PHONE as string) || '+966500000000',
+  email: (env.VITE_CONTACT_EMAIL as string) || 'sabiidb7@gmail.com',
+  phone: (env.VITE_CONTACT_PHONE as string) || '+966538360053',
   // Digits only, international format, no "+" — used to build the wa.me link.
-  whatsapp: (env.VITE_WHATSAPP_NUMBER as string) || '966500000000',
+  whatsapp: (env.VITE_WHATSAPP_NUMBER as string) || '966538360053',
   whatsappMessage:
     (env.VITE_WHATSAPP_MESSAGE as string) ||
-    "Hi, I saw your restaurant technology portfolio and I'd like to discuss building an app for my restaurant.",
+    "Hello, I'm interested in building a digital ordering/app system for my restaurant. I'd like to discuss my requirements and request a demo.",
   // Optional: endpoint that receives the contact form (leave empty to use mailto fallback).
   formEndpoint: (env.VITE_FORM_ENDPOINT as string) || '',
 };

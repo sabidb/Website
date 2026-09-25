@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://restopos.sa/sitemap.xml
+Sitemap: https://restopos.store/sitemap.xml
