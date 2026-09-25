@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#071a13"/><stop offset="0.6" stop-color="#0a2419"/><stop offset="1" stop-color="#0b1211"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#12a06a"/><stop offset="1" stop-color="#0a4d38"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.1" r="0.6">
+      <stop stop-color="#1cb87d" stop-opacity="0.35"/><stop offset="1" stop-color="#1cb87d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g transform="translate(90,90)">
+    <rect width="96" height="96" rx="26" fill="url(#mark)"/>
+    <path d="M33 27v42M33 27c6.6 0 6.6 15 0 15M63 27v42M55.5 27v13.5c0 4.2 7.5 4.2 7.5 0V27"
+          stroke="#fff" stroke-width="5.4" stroke-linecap="round" fill="none"/>
+  </g>
+  <text x="210" y="152" font-family="'Plus Jakarta Sans',sans-serif" font-weight="800" font-size="52" fill="#ffffff">Qoot</text>
+  <text x="90" y="330" font-family="'Plus Jakarta Sans',sans-serif" font-weight="800" font-size="76" fill="#ffffff">Custom Restaurant Apps</text>
+  <text x="90" y="416" font-family="'Plus Jakarta Sans',sans-serif" font-weight="800" font-size="76" fill="#e2b24c">&amp; Multi-Branch Software</text>
+  <text x="90" y="486" font-family="'Inter',sans-serif" font-weight="400" font-size="30" fill="#9fb5ac">Ordering platforms · Admin dashboards · Kitchen &amp; delivery operations</text>
+  <g font-family="'Plus Jakarta Sans',sans-serif" font-weight="700" font-size="24" fill="#cfeede">
+    <rect x="90" y="524" width="230" height="56" rx="28" fill="#0e7c4f"/>
+    <text x="205" y="560" text-anchor="middle" fill="#ffffff">Request a Demo</text>
+  </g>
+</svg>

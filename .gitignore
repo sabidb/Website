@@ -1,0 +1,11 @@
+# Dependencies
+node_modules
+
+# Local env
+.env
+.env.local
+
+# Orphaned files from the previous site (kept out of the repo)
+sabi.png
+assets/index-Bezh6mFL.js
+assets/index-D-TB4-lA.css
