@@ -41,9 +41,15 @@ export const nav = [
   { label: 'Home', href: '#home' },
   { label: 'Solutions', href: '#solutions' },
   { label: 'Projects', href: '#projects' },
-  { label: 'Features', href: '#features' },
+  { label: 'How It Works', href: '#how' },
   { label: 'About', href: '#about' },
   { label: 'Contact', href: '#contact' },
+];
+
+/** The moving parts of a real restaurant operation — used in "The problem we solve". */
+export const operations = [
+  'Customers', 'Menus', 'Orders', 'Branches', 'Kitchens',
+  'Delivery', 'Payments', 'Promotions', 'Staff', 'Reporting',
 ];
 
 /** Trust / capability strip below the hero. */
@@ -206,6 +212,7 @@ export interface Shot {
   mockup: string; // key into the mockup registry
   image?: string; // optional real screenshot in /public
   alt: string;
+  caption: string; // short contextual explanation shown with the screen
 }
 
 export const galleryCategories: Category[] = [
@@ -221,16 +228,16 @@ export const galleryCategories: Category[] = [
 ];
 
 export const gallery: Shot[] = [
-  { id: 'g1', title: 'Home & Discovery', category: 'Customer App', device: 'phone', mockup: 'menu', alt: 'Customer app home screen showing restaurant branches and featured items' },
-  { id: 'g2', title: 'Menu & Categories', category: 'Menu', device: 'phone', mockup: 'menu', alt: 'Menu screen with categories and product cards' },
-  { id: 'g3', title: 'Product Customization', category: 'Menu', device: 'phone', mockup: 'product', alt: 'Product detail screen with customization options' },
-  { id: 'g4', title: 'Cart & Checkout', category: 'Checkout', device: 'phone', mockup: 'checkout', alt: 'Checkout screen with order summary and payment' },
-  { id: 'g5', title: 'Order Tracking', category: 'Order Tracking', device: 'phone', mockup: 'tracking', alt: 'Live order tracking screen with status timeline' },
-  { id: 'gpos', title: 'POS · Cashier', category: 'POS', device: 'browser', mockup: 'pos', alt: 'Point-of-sale cashier screen with order pad and payment' },
-  { id: 'g6', title: 'Admin Overview', category: 'Admin', device: 'browser', mockup: 'admin', alt: 'Admin dashboard overview with orders and metrics' },
-  { id: 'g7', title: 'Kitchen Display', category: 'Kitchen', device: 'browser', mockup: 'kitchen', alt: 'Kitchen display system with incoming order tickets' },
-  { id: 'g8', title: 'Delivery Board', category: 'Delivery', device: 'browser', mockup: 'delivery', alt: 'Delivery management board with drivers and orders' },
-  { id: 'g9', title: 'Reports & Analytics', category: 'Reports', device: 'browser', mockup: 'reports', alt: 'Reports screen with sales charts and breakdowns' },
+  { id: 'g1', title: 'Home & Discovery', category: 'Customer App', device: 'phone', mockup: 'menu', alt: 'Customer app home screen showing restaurant branches and featured items', caption: 'Customers land in your branded app, choose a branch and browse featured items.' },
+  { id: 'g2', title: 'Menu & Categories', category: 'Menu', device: 'phone', mockup: 'menu', alt: 'Menu screen with categories and product cards', caption: 'A clear, photo-rich menu organised by category makes ordering effortless.' },
+  { id: 'g3', title: 'Product Customization', category: 'Menu', device: 'phone', mockup: 'product', alt: 'Product detail screen with customization options', caption: 'Guests customise items with options and add-ons before adding to the cart.' },
+  { id: 'g4', title: 'Cart & Checkout', category: 'Checkout', device: 'phone', mockup: 'checkout', alt: 'Checkout screen with order summary and payment', caption: 'A simple checkout with an itemised summary, VAT and the chosen payment method.' },
+  { id: 'g5', title: 'Order Tracking', category: 'Order Tracking', device: 'phone', mockup: 'tracking', alt: 'Live order tracking screen with status timeline', caption: 'Customers follow their order in real time, from kitchen to delivery.' },
+  { id: 'gpos', title: 'POS · Cashier', category: 'POS', device: 'browser', mockup: 'pos', alt: 'Point-of-sale cashier screen with order pad and payment', caption: 'Staff take in-store orders on a fast cashier screen, connected to the same system.' },
+  { id: 'g6', title: 'Admin Overview', category: 'Admin', device: 'browser', mockup: 'admin', alt: 'Admin dashboard overview with orders and metrics', caption: 'Owners see live orders and key numbers across every branch at a glance.' },
+  { id: 'g7', title: 'Kitchen Display', category: 'Kitchen', device: 'browser', mockup: 'kitchen', alt: 'Kitchen display system with incoming order tickets', caption: 'Incoming orders reach the kitchen as clear tickets so nothing is missed.' },
+  { id: 'g8', title: 'Delivery Board', category: 'Delivery', device: 'browser', mockup: 'delivery', alt: 'Delivery management board with drivers and orders', caption: 'Assign orders to drivers and track delivery status from one board.' },
+  { id: 'g9', title: 'Reports & Analytics', category: 'Reports', device: 'browser', mockup: 'reports', alt: 'Reports screen with sales charts and breakdowns', caption: 'Sales, channels and top items — the numbers owners actually use to decide.' },
 ];
 
 /** Customer journey steps. */
@@ -300,11 +307,12 @@ export const segments = [
 
 /** Engagement / delivery process — shows we work as a partner. */
 export const process = [
-  { n: '01', title: 'Discovery', body: 'We learn your menu, branches, workflows and goals — then agree a clear scope.' },
-  { n: '02', title: 'Design', body: 'We map the customer journey, POS and admin screens around how you operate.' },
-  { n: '03', title: 'Build', body: 'We develop your app, POS and dashboard as one connected system.' },
-  { n: '04', title: 'Launch', body: 'We roll out across your branches and get your team confident on it.' },
-  { n: '05', title: 'Support & Scale', body: 'We maintain the platform and keep building as you add branches and features.' },
+  { n: '01', title: 'Discover', body: 'Understand the restaurant, branches and requirements.' },
+  { n: '02', title: 'Plan', body: 'Define the customer experience and operational system.' },
+  { n: '03', title: 'Design', body: 'Create the interfaces and user experience.' },
+  { n: '04', title: 'Build', body: 'Develop the application and backend systems.' },
+  { n: '05', title: 'Integrate', body: 'Connect required services and restaurant workflows.' },
+  { n: '06', title: 'Launch', body: 'Test, deploy and support the system.' },
 ];
 
 /** "Built to grow with you" — factual architecture principles, not certifications. */
@@ -319,11 +327,12 @@ export const reliability = [
 
 /** FAQ — answers a serious buyer's real objections. */
 export const faq = [
-  { q: 'Do we own our data and customers?', a: 'Yes. It’s your platform — your menu, your customers and your data — not a marketplace that sits between you and your guests.' },
-  { q: 'Can it handle multiple branches?', a: 'Yes. Each branch runs its own operations while ownership stays central, and the system scales as you add locations.' },
-  { q: 'How do payments work?', a: 'We build checkout around the payment provider you choose, with automatic VAT calculation and clean receipts.' },
-  { q: 'Is it available in Arabic?', a: 'We build for the Saudi market and can deliver the customer experience in Arabic and English, with right-to-left layouts.' },
-  { q: 'Can you integrate our existing systems?', a: 'Where possible, yes — we build around the payment providers, hardware and tools your restaurant already relies on.' },
-  { q: 'How long does it take?', a: 'It depends on scope. We define this together in the discovery phase and give you a clear plan and timeline before we build.' },
-  { q: 'Do you provide support after launch?', a: 'Yes. We maintain the system after launch and continue to build with you as your business grows.' },
+  { q: 'Can you build an app for my restaurant?', a: 'Yes. We design and build custom customer ordering apps — with your menu, your branding and the workflow that fits how your restaurant operates.' },
+  { q: 'Can you support multiple branches?', a: 'Yes. The system is built for multi-branch operation: each branch runs its own day-to-day while ownership and reporting stay central, and it scales as you add locations.' },
+  { q: 'Can the system have my restaurant branding?', a: 'Yes. It’s your platform end to end — your name, colours, menu and experience, not a shared marketplace look.' },
+  { q: 'Can you build an admin dashboard?', a: 'Yes. Owners and managers get a dashboard to manage products, orders, branches, customers, promotions and reports in one place.' },
+  { q: 'Can you integrate payments?', a: 'Yes. Payment integration is designed around the provider you choose and your project’s requirements, with automatic VAT and clean receipts.' },
+  { q: 'Can you build delivery functionality?', a: 'Yes, where it fits your operation — we support in-house delivery workflows such as assigning drivers and tracking delivery status.' },
+  { q: 'Can you build a system specifically for my restaurant?', a: 'Yes — that’s the core of what we do. Every platform is custom-built around your menu, branches, operations and requirements.' },
+  { q: 'How do we get started?', a: 'Request a demo → we discuss your requirements → we prepare a proposal → we design and build → we launch and support the system.' },
 ];

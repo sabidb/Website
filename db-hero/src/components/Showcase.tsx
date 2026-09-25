@@ -80,6 +80,7 @@ export const Showcase: React.FC = () => {
 
         <div className="showcase__caption">
           <strong>{current.title}</strong>
+          <p className="showcase__explain">{current.caption}</p>
           <span className="muted">{current.category} · {active + 1} / {shots.length}</span>
         </div>
 
@@ -105,7 +106,10 @@ export const Showcase: React.FC = () => {
           <button className="lightbox__nav lightbox__nav--l" onClick={prev} aria-label="Previous"><ChevronLeft size={30} /></button>
           <div className="lightbox__stage" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
             <Mockup screen={current.mockup} device={current.device} image={current.image} alt={current.alt} />
-            <div className="lightbox__caption">{current.title} · {current.category}</div>
+            <div className="lightbox__caption">
+              <strong>{current.title}</strong>
+              <span>{current.caption}</span>
+            </div>
           </div>
           <button className="lightbox__nav lightbox__nav--r" onClick={next} aria-label="Next"><ChevronRight size={30} /></button>
         </div>

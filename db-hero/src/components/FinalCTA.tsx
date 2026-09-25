@@ -10,11 +10,12 @@ export const FinalCTA: React.FC = () => (
     <div className="finalcta__glow" aria-hidden="true" />
     <div className="container">
       <Reveal className="finalcta__inner">
-        <h2 className="finalcta__title">Ready to Build Your Restaurant's<br />Own Digital Platform?</h2>
-        <p className="finalcta__lede">Tell us what you need. We'll help turn your restaurant workflow into a scalable digital system.</p>
+        <h2 className="finalcta__title">Your Restaurant Deserves Technology<br />Built Around It.</h2>
+        <p className="finalcta__lede">From customer ordering to branch operations, we build digital systems designed around your restaurant.</p>
         <div className="finalcta__cta">
           <button className="btn btn--light" onClick={() => scrollTo('#contact')}>Request a Demo <ArrowRight size={17} /></button>
-          <a className="btn btn--whatsapp" href={waLink()} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} /> WhatsApp us</a>
+          <button className="btn btn--outline-light" onClick={() => scrollTo('#projects')}>Explore Our Work</button>
+          <a className="btn btn--whatsapp" href={waLink()} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} /> WhatsApp</a>
         </div>
       </Reveal>
     </div>

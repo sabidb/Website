@@ -5,8 +5,8 @@ import { waLink, telLink, mailLink } from '../lib/links';
 import { Reveal } from './ui/Reveal';
 
 const needsOptions = [
-  'Customer App', 'Website Ordering', 'Multi-Branch System', 'Admin Dashboard',
-  'Delivery System', 'Kitchen System', 'Custom Software', 'Other',
+  'Customer App', 'Ordering Website', 'Multi-Branch System', 'Admin Dashboard',
+  'Kitchen System', 'Delivery System', 'Payment Integration', 'Custom Software',
 ];
 
 interface FormState {
@@ -75,7 +75,7 @@ export const Contact: React.FC = () => {
         <Reveal className="contact__intro">
           <span className="eyebrow"><span className="dot" /> Contact</span>
           <h2 className="h2" style={{ marginTop: 14 }}>Let's Build Your Restaurant's Digital Platform</h2>
-          <p className="lede">Tell us about your restaurant and what you need. We'll follow up to arrange a demo.</p>
+          <p className="lede">Tell us about your restaurant, branches and requirements. We'll show you what your digital platform could look like.</p>
 
           <div className="contact__direct">
             <a className="btn btn--whatsapp" href={waLink()} target="_blank" rel="noopener noreferrer">
@@ -103,7 +103,7 @@ export const Contact: React.FC = () => {
             <form className="contact__form" onSubmit={onSubmit} noValidate>
               <div className="field-row">
                 <label className="field">
-                  <span>Name *</span>
+                  <span>Full Name *</span>
                   <input value={f.name} onChange={(e) => set('name', e.target.value)} aria-invalid={!!errors.name} placeholder="Your name" />
                   {errors.name && <em>{errors.name}</em>}
                 </label>
@@ -135,13 +135,13 @@ export const Contact: React.FC = () => {
                   </select>
                 </label>
                 <label className="field">
-                  <span>Current Ordering System</span>
+                  <span>Current System</span>
                   <input value={f.currentSystem} onChange={(e) => set('currentSystem', e.target.value)} placeholder="None / marketplace / other" />
                 </label>
               </div>
 
               <fieldset className="field">
-                <span className="field__legend">What do you need? *</span>
+                <span className="field__legend">Required Solution *</span>
                 <div className="needs">
                   {needsOptions.map((n) => (
                     <button type="button" key={n} className={`need ${f.needs.includes(n) ? 'is-on' : ''}`} onClick={() => toggleNeed(n)} aria-pressed={f.needs.includes(n)}>

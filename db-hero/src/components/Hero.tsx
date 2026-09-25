@@ -18,19 +18,18 @@ export const Hero: React.FC = () => (
         </span>
         <h1 className="hero__title">
           Your Restaurant.<br />
-          Your App.<br />
-          <span className="hero__accent">Your Technology.</span>
+          <span className="hero__accent">Your Digital Platform.</span>
         </h1>
         <p className="hero__lede">
-          {brand.name} builds custom restaurant ordering platforms, POS, multi-branch
-          systems, admin dashboards and digital operations — tailored to your business.
+          {brand.name} designs and builds custom restaurant apps, ordering platforms, multi-branch
+          systems and operational software — tailored to how your restaurant actually works.
         </p>
         <div className="hero__cta">
           <button className="btn btn--light" onClick={() => scrollTo('#contact')}>
             Request a Demo <ArrowRight size={17} />
           </button>
           <button className="btn btn--outline-light" onClick={() => scrollTo('#projects')}>
-            <PlayCircle size={18} /> View Our Work
+            <PlayCircle size={18} /> Explore Our Work
           </button>
         </div>
         <ul className="hero__trust">

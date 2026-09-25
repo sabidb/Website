@@ -5,6 +5,7 @@ import { Nav } from './components/Nav';
 import { ScrollProgress } from './components/ScrollProgress';
 import { Hero } from './components/Hero';
 import { CapabilityStrip } from './components/CapabilityStrip';
+import { Problem } from './components/Problem';
 import { Segments } from './components/Segments';
 import { WhatWeBuild } from './components/WhatWeBuild';
 import { DeepDive } from './components/DeepDive';
@@ -33,6 +34,7 @@ const App: React.FC = () => (
     <main>
       <Hero />
       <CapabilityStrip />
+      <Problem />
       <Segments />
       <WhatWeBuild />
       <DeepDive />

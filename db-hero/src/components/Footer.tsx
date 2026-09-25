@@ -1,7 +1,6 @@
 import React from 'react';
 import { MessageCircle, Mail, Phone } from 'lucide-react';
-import { brand, nav } from '../site.config';
-import { contact } from '../site.config';
+import { brand, contact } from '../site.config';
 import { waLink, telLink, mailLink } from '../lib/links';
 
 const scrollTo = (href: string) => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
@@ -32,9 +31,10 @@ export const Footer: React.FC = () => (
 
       <div className="footer__col">
         <h4>Company</h4>
-        {nav.filter((n) => ['#projects', '#about', '#contact'].includes(n.href)).map((n) => (
-          <a key={n.href} href={n.href} onClick={(e) => { e.preventDefault(); scrollTo(n.href); }}>{n.label}</a>
-        ))}
+        <a href="#projects" onClick={(e) => { e.preventDefault(); scrollTo('#projects'); }}>Projects</a>
+        <a href="#process" onClick={(e) => { e.preventDefault(); scrollTo('#process'); }}>Process</a>
+        <a href="#about" onClick={(e) => { e.preventDefault(); scrollTo('#about'); }}>About</a>
+        <a href="#contact" onClick={(e) => { e.preventDefault(); scrollTo('#contact'); }}>Contact</a>
       </div>
 
       <div className="footer__col">
