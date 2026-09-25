@@ -3,6 +3,7 @@ import { capabilities } from '../site.config';
 import { Icon } from './ui/Icon';
 
 const iconFor: Record<string, string> = {
+  'Point of Sale': 'Monitor',
   'Customer Ordering': 'Smartphone',
   'Multi-Branch': 'Building2',
   'Admin Dashboard': 'LayoutDashboard',

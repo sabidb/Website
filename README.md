@@ -1,4 +1,4 @@
-# Qoot — Restaurant Technology Portfolio
+# RestoPOS — Restaurant Technology Portfolio
 
 A production-quality marketing/portfolio website for a company that builds custom
 restaurant technology (ordering apps, multi-branch systems, admin dashboards and

@@ -201,8 +201,52 @@ const ReportsScreen = () => (
   </div>
 );
 
+const PosScreen = () => (
+  <div className="scr">
+    <div className="pos">
+      <div className="pos__left">
+        <div className="pos__cats">
+          <span className="on">Burgers</span><span>Grills</span><span>Sides</span><span>Drinks</span>
+        </div>
+        <div className="pos__grid">
+          {[
+            { n: 'Signature Burger', p: '32', v: '' },
+            { n: 'Double Burger', p: '44', v: 'v2' },
+            { n: 'Mixed Grill', p: '58', v: 'v3' },
+            { n: 'Loaded Fries', p: '21', v: 'v2' },
+            { n: 'Chicken Wrap', p: '27', v: '' },
+            { n: 'Lemonade', p: '14', v: 'v3' },
+          ].map((x, i) => (
+            <div className="pos__item" key={i}>
+              <div className={`pos__thumb ${x.v}`} />
+              <b>{x.n}</b><span>{x.p} SAR</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="pos__ticket">
+        <div className="pos__ticket-head"><b>Order · Table 4</b><span>Dine-in</span></div>
+        <div className="pos__lines">
+          <div className="pos__line"><span>2× Signature Burger</span><b>64</b></div>
+          <div className="pos__line"><span>1× Mixed Grill</span><b>58</b></div>
+          <div className="pos__line"><span>2× Lemonade</span><b>28</b></div>
+        </div>
+        <div className="pos__sum"><span>Subtotal</span><span>150.00</span></div>
+        <div className="pos__sum"><span>VAT 15%</span><span>22.50</span></div>
+        <div className="pos__sum pos__sum--total"><span>Total</span><span>172.50 SAR</span></div>
+        <div className="pos__pay">
+          <button className="pos__pay-btn">Cash</button>
+          <button className="pos__pay-btn on">Card</button>
+          <button className="pos__pay-btn wide">Charge · 172.50</button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const registry: Record<string, React.FC> = {
   menu: MenuScreen,
+  pos: PosScreen,
   product: ProductScreen,
   checkout: CheckoutScreen,
   tracking: TrackingScreen,
@@ -228,7 +272,7 @@ export const BrowserMock: React.FC<{ screen: string; url?: string }> = ({ screen
     <div className="browser" aria-hidden="true">
       <div className="browser__bar">
         <div className="browser__dot" /><div className="browser__dot" /><div className="browser__dot" />
-        <div className="browser__url">{url || 'admin.your-restaurant.sa'}</div>
+        <div className="browser__url">{url || 'app.your-restaurant.sa'}</div>
       </div>
       <div className="browser__screen"><Screen /></div>
     </div>
@@ -249,7 +293,7 @@ export const Mockup: React.FC<{ screen: string; device: 'phone' | 'browser'; ima
           </>
         ) : (
           <>
-            <div className="browser__bar"><div className="browser__dot" /><div className="browser__dot" /><div className="browser__dot" /><div className="browser__url">admin.your-restaurant.sa</div></div>
+            <div className="browser__bar"><div className="browser__dot" /><div className="browser__dot" /><div className="browser__dot" /><div className="browser__url">app.your-restaurant.sa</div></div>
             <div className="browser__screen"><img src={image} alt={alt || ''} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>
           </>
         )}

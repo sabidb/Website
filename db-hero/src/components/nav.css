@@ -14,14 +14,19 @@
 
 .brandmark { display: inline-flex; align-items: center; gap: 10px; }
 .brandmark__logo { display: grid; place-items: center; }
-.brandmark__name { font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: var(--text); }
+/* At the top the nav sits over the dark hero → light text. */
+.brandmark__name { font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: #fff; transition: color .3s ease; }
+.nav--scrolled .brandmark__name { color: var(--text); }
 
 .nav__links { display: flex; align-items: center; gap: 28px; }
-.nav__links a { font-family: var(--font-display); font-weight: 600; font-size: 14.5px; color: var(--text-2); transition: color .2s ease; }
-.nav__links a:hover { color: var(--green-700); }
+.nav__links a { font-family: var(--font-display); font-weight: 600; font-size: 14.5px; color: rgba(255,255,255,0.82); transition: color .2s ease; }
+.nav__links a:hover { color: #fff; }
+.nav--scrolled .nav__links a { color: var(--text-2); }
+.nav--scrolled .nav__links a:hover { color: var(--green-700); }
 
 .nav__actions { display: flex; align-items: center; gap: 10px; }
-.nav__burger { display: none; background: transparent; border: 1px solid var(--border-strong); border-radius: 10px; width: 42px; height: 42px; align-items: center; justify-content: center; color: var(--text); }
+.nav__burger { display: none; background: transparent; border: 1px solid rgba(255,255,255,0.35); border-radius: 10px; width: 42px; height: 42px; align-items: center; justify-content: center; color: #fff; transition: color .3s ease, border-color .3s ease; }
+.nav--scrolled .nav__burger { border-color: var(--border-strong); color: var(--text); }
 
 .nav__mobile {
   position: fixed; inset: var(--nav-h) 0 auto 0; background: #fff;

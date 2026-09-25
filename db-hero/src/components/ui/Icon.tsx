@@ -1,13 +1,13 @@
 import React from 'react';
 import {
   Smartphone, Building2, LayoutDashboard, ChefHat, Bike, CreditCard, BarChart3,
-  Puzzle, MapPin, MessageSquare, Bell, Printer, Cloud, Check, ArrowRight,
+  Puzzle, MapPin, MessageSquare, Bell, Printer, Cloud, Check, ArrowRight, Monitor,
   type LucideIcon,
 } from 'lucide-react';
 
 const map: Record<string, LucideIcon> = {
   Smartphone, Building2, LayoutDashboard, ChefHat, Bike, CreditCard, BarChart3,
-  Puzzle, MapPin, MessageSquare, Bell, Printer, Cloud, Check, ArrowRight,
+  Puzzle, MapPin, MessageSquare, Bell, Printer, Cloud, Check, ArrowRight, Monitor,
 };
 
 export const Icon: React.FC<{ name: string; size?: number; strokeWidth?: number }> = ({

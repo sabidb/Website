@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://qoot.example/sitemap.xml
+Sitemap: https://restopos.sa/sitemap.xml

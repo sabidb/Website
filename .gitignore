@@ -5,7 +5,9 @@ node_modules
 .env
 .env.local
 
-# Orphaned files from the previous site (kept out of the repo)
+# Orphaned build artifacts (superseded by stable assets/index.js + index.css)
 sabi.png
 assets/index-Bezh6mFL.js
 assets/index-D-TB4-lA.css
+assets/index-BBQRrvEY.css
+assets/index-Bx_TcD-a.js

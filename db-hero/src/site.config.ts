@@ -15,16 +15,18 @@
 const env = import.meta.env;
 
 export const brand = {
-  name: (env.VITE_BRAND_NAME as string) || 'Qoot',
+  name: (env.VITE_BRAND_NAME as string) || 'RestoPOS',
   // Short arabic-friendly tagline shown in the eyebrow.
   tagline: 'Restaurant Technology',
   taglineAr: 'تقنية المطاعم',
-  domain: (env.VITE_BRAND_DOMAIN as string) || 'qoot.example',
+  domain: (env.VITE_BRAND_DOMAIN as string) || 'restopos.sa',
+  // Factual, non-fabricated trust points for the Saudi market.
+  trust: ['Arabic & English', 'VAT-ready invoicing', 'Built for Saudi restaurants'],
 };
 
 export const contact = {
   // All configurable — set these in your deployment environment.
-  email: (env.VITE_CONTACT_EMAIL as string) || 'hello@qoot.example',
+  email: (env.VITE_CONTACT_EMAIL as string) || 'hello@restopos.sa',
   phone: (env.VITE_CONTACT_PHONE as string) || '+966500000000',
   // Digits only, international format, no "+" — used to build the wa.me link.
   whatsapp: (env.VITE_WHATSAPP_NUMBER as string) || '966500000000',
@@ -46,6 +48,7 @@ export const nav = [
 
 /** Trust / capability strip below the hero. */
 export const capabilities = [
+  'Point of Sale',
   'Customer Ordering',
   'Multi-Branch',
   'Admin Dashboard',
@@ -56,6 +59,11 @@ export const capabilities = [
 
 /** "What we build" cards. Icon names map to lucide-react icons in the component. */
 export const solutions = [
+  {
+    icon: 'Monitor',
+    title: 'Point of Sale (POS)',
+    body: 'Fast cashier and in-store order taking, connected to the same menu, branches and reports.',
+  },
   {
     icon: 'Smartphone',
     title: 'Customer App',
@@ -100,6 +108,7 @@ export const solutions = [
 
 /** Feature chips used across the case study and multi-branch sections. */
 export const featureChips = [
+  'Point of Sale',
   'Customer Ordering',
   'Multi-Branch',
   'Admin Dashboard',
@@ -120,6 +129,7 @@ export type Category =
   | 'Menu'
   | 'Checkout'
   | 'Order Tracking'
+  | 'POS'
   | 'Admin'
   | 'Kitchen'
   | 'Delivery'
@@ -140,6 +150,7 @@ export const galleryCategories: Category[] = [
   'Menu',
   'Checkout',
   'Order Tracking',
+  'POS',
   'Admin',
   'Kitchen',
   'Delivery',
@@ -152,6 +163,7 @@ export const gallery: Shot[] = [
   { id: 'g3', title: 'Product Customization', category: 'Menu', device: 'phone', mockup: 'product', alt: 'Product detail screen with customization options' },
   { id: 'g4', title: 'Cart & Checkout', category: 'Checkout', device: 'phone', mockup: 'checkout', alt: 'Checkout screen with order summary and payment' },
   { id: 'g5', title: 'Order Tracking', category: 'Order Tracking', device: 'phone', mockup: 'tracking', alt: 'Live order tracking screen with status timeline' },
+  { id: 'gpos', title: 'POS · Cashier', category: 'POS', device: 'browser', mockup: 'pos', alt: 'Point-of-sale cashier screen with order pad and payment' },
   { id: 'g6', title: 'Admin Overview', category: 'Admin', device: 'browser', mockup: 'admin', alt: 'Admin dashboard overview with orders and metrics' },
   { id: 'g7', title: 'Kitchen Display', category: 'Kitchen', device: 'browser', mockup: 'kitchen', alt: 'Kitchen display system with incoming order tickets' },
   { id: 'g8', title: 'Delivery Board', category: 'Delivery', device: 'browser', mockup: 'delivery', alt: 'Delivery management board with drivers and orders' },
@@ -191,15 +203,16 @@ export const projects: Project[] = [
     type: 'Multi-branch quick-service restaurant',
     description:
       'A connected restaurant ecosystem covering customer ordering, administration and operational workflows — used here to demonstrate the architecture we build around each restaurant.',
-    capabilities: ['Customer Ordering', 'Multi-Branch', 'Admin Dashboard', 'Order Management', 'Kitchen Workflow', 'Delivery Workflow', 'Payments', 'Reports'],
+    capabilities: ['Point of Sale', 'Customer Ordering', 'Multi-Branch', 'Admin Dashboard', 'Order Management', 'Kitchen Workflow', 'Delivery Workflow', 'Payments', 'Reports'],
     featured: true,
     status: 'Reference architecture',
-    shots: ['g1', 'g2', 'g4', 'g5', 'g6', 'g7'],
+    shots: ['g1', 'g2', 'gpos', 'g4', 'g5', 'g6', 'g7'],
   },
 ];
 
 /** Technology / integration categories. Only capability areas — no vendor logos claimed. */
 export const techAreas = [
+  { icon: 'Monitor', title: 'POS Integrations', body: 'Connect the cashier/POS terminal to the same menu, orders and reports.' },
   { icon: 'CreditCard', title: 'Payments', body: 'Architected around your chosen payment provider and gateway.' },
   { icon: 'MapPin', title: 'Maps & Location', body: 'Address, branch and delivery-zone handling.' },
   { icon: 'MessageSquare', title: 'SMS / OTP', body: 'Phone verification and transactional messaging.' },
