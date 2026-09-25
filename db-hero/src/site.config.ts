@@ -57,54 +57,117 @@ export const capabilities = [
   'Payment Integration',
 ];
 
-/** "What we build" cards. Icon names map to lucide-react icons in the component. */
+/**
+ * "What we build" cards. Each card carries a short summary (`body`) plus a few
+ * concrete function bullets (`points`) so a restaurant owner understands
+ * exactly what the system does — not just its name.
+ * Icon names map to lucide-react icons in the component.
+ */
 export const solutions = [
   {
     icon: 'Monitor',
     title: 'Point of Sale (POS)',
-    body: 'Fast cashier and in-store order taking, connected to the same menu, branches and reports.',
+    body: 'A fast cashier screen your staff use in-store — connected to the same menu, branches and reports as everything else.',
+    points: ['Take dine-in, takeaway & delivery orders', 'VAT-compliant receipts', 'Works the same across every branch'],
   },
   {
     icon: 'Smartphone',
     title: 'Customer App',
-    body: 'Browse menus, customize products, manage carts, checkout and track orders.',
+    body: "Your own branded app where customers order directly from you — no marketplace between you and your guest.",
+    points: ['Browse menu & customize items', 'Cart, checkout & secure payment', 'Live order tracking'],
   },
   {
     icon: 'Building2',
     title: 'Multi-Branch Management',
-    body: 'Manage multiple restaurant branches with appropriate branch-level access and centralized ownership.',
+    body: 'Run many locations from one system, with each branch operating on its own while ownership stays central.',
+    points: ['Branch-level menus & pricing', 'Branch-specific staff access', 'One owner view across all branches'],
   },
   {
     icon: 'LayoutDashboard',
     title: 'Admin Dashboard',
-    body: 'Manage products, orders, branches, customers, promotions and operational data.',
+    body: 'The control room for the whole operation — where owners and managers run the business day to day.',
+    points: ['Manage products, categories & prices', 'Track and update every order', 'Handle customers & promotions'],
   },
   {
     icon: 'ChefHat',
     title: 'Kitchen Operations',
-    body: 'Give kitchen staff the information they need to process incoming orders efficiently.',
+    body: 'A clear kitchen view so staff always know what to cook next and nothing gets missed at the pass.',
+    points: ['Incoming orders as live tickets', 'Item-by-item preparation detail', 'Mark items ready as they’re done'],
   },
   {
     icon: 'Bike',
     title: 'Delivery Operations',
-    body: 'Support restaurant delivery workflows and driver/order management where required.',
+    body: 'Keep your own delivery organised — from assigning a driver to getting the order to the door.',
+    points: ['Assign orders to drivers', 'Track delivery status', 'Branch-aware delivery zones'],
   },
   {
     icon: 'CreditCard',
     title: 'Payments',
-    body: "Design the checkout architecture around the restaurant's selected payment provider.",
+    body: "Checkout built around the payment provider you choose, so paying is smooth and money is accounted for.",
+    points: ['Card & cash flows', 'Automatic VAT calculation', 'Payment status on every order'],
   },
   {
     icon: 'BarChart3',
     title: 'Reports',
-    body: 'Give owners visibility into orders, sales and operational performance.',
+    body: 'See how the business is really doing, with the numbers that matter for owners and managers.',
+    points: ['Sales by day, branch & channel', 'Best-selling items', 'Operational performance'],
   },
   {
     icon: 'Puzzle',
     title: 'Custom Integrations',
-    body: "Build around the restaurant's existing systems and operational requirements.",
+    body: 'Connect the systems and services your restaurant already relies on, instead of forcing you to switch.',
+    points: ['Payment & delivery providers', 'Printers & hardware', 'Third-party tools you already use'],
   },
 ] as const;
+
+/**
+ * Feature deep-dive — flagship systems shown with their mockup beside a clear,
+ * plain-language explanation of what each one actually does.
+ */
+export const deepDive = [
+  {
+    eyebrow: 'For your staff',
+    title: 'Point of Sale that just works',
+    device: 'browser' as const,
+    mockup: 'pos',
+    body: "Your cashiers take orders on a fast, simple screen — dine-in, takeaway or delivery. Every sale is recorded, taxed correctly and flows into the same reports as your app orders.",
+    functions: [
+      'Tap items to build an order in seconds',
+      'Switch between dine-in, takeaway & delivery',
+      'Automatic VAT (15%) and clean receipts',
+      'Cash and card payment flows',
+      'Same menu and prices as every branch',
+    ],
+  },
+  {
+    eyebrow: 'For your customers',
+    title: 'Your own ordering app',
+    device: 'phone' as const,
+    mockup: 'menu',
+    body: 'Customers order straight from your branded app or website — you own the experience and the relationship, with no marketplace commission model in between.',
+    functions: [
+      'Browse a beautiful menu with photos',
+      'Customize items, add-ons and quantities',
+      'Secure checkout with saved details',
+      'Live order tracking to the door',
+      'Re-order favourites in one tap',
+    ],
+  },
+  {
+    eyebrow: 'For the owner',
+    title: 'One dashboard for everything',
+    device: 'browser' as const,
+    mockup: 'admin',
+    body: 'Run the whole business from one place: menus, orders, branches, staff, promotions and reports — with a live view across every location you operate.',
+    functions: [
+      'Manage products, categories & pricing',
+      'See and update orders in real time',
+      'Add branches and control staff access',
+      'Run promotions and manage customers',
+      'Sales & operations reports at a glance',
+    ],
+  },
+];
 
 /** Feature chips used across the case study and multi-branch sections. */
 export const featureChips = [

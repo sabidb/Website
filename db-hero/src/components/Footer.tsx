@@ -27,7 +27,7 @@ export const Footer: React.FC = () => (
         <h4>Solutions</h4>
         <a href="#solutions" onClick={(e) => { e.preventDefault(); scrollTo('#solutions'); }}>What we build</a>
         <a href="#showcase" onClick={(e) => { e.preventDefault(); scrollTo('#showcase'); }}>App showcase</a>
-        <a href="#features" onClick={(e) => { e.preventDefault(); scrollTo('#features'); }}>Integrations</a>
+        <a href="#integrations" onClick={(e) => { e.preventDefault(); scrollTo('#integrations'); }}>Integrations</a>
       </div>
 
       <div className="footer__col">

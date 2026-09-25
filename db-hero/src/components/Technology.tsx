@@ -4,7 +4,7 @@ import { Icon } from './ui/Icon';
 import { Reveal } from './ui/Reveal';
 
 export const Technology: React.FC = () => (
-  <section id="features" className="section technology">
+  <section id="integrations" className="section technology">
     <div className="container">
       <div className="section-head center">
         <span className="eyebrow"><span className="dot" /> Technology &amp; integrations</span>

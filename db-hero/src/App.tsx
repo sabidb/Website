@@ -5,6 +5,7 @@ import { Nav } from './components/Nav';
 import { Hero } from './components/Hero';
 import { CapabilityStrip } from './components/CapabilityStrip';
 import { WhatWeBuild } from './components/WhatWeBuild';
+import { DeepDive } from './components/DeepDive';
 import { CaseStudy } from './components/CaseStudy';
 import { Showcase } from './components/Showcase';
 import { HowItWorks } from './components/HowItWorks';
@@ -27,6 +28,7 @@ const App: React.FC = () => (
       <Hero />
       <CapabilityStrip />
       <WhatWeBuild />
+      <DeepDive />
       <CaseStudy />
       <Showcase />
       <HowItWorks />

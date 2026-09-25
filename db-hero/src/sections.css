@@ -47,6 +47,29 @@
 
 /* ---------------- SOLUTIONS ---------------- */
 .solutions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.solution-card { display: flex; flex-direction: column; }
+.solution-card__points { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+.solution-card__points li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text); font-weight: 500; }
+.solution-card__points li svg { color: var(--green-600); flex: none; margin-top: 2px; }
+
+/* ---------------- DEEP DIVE ---------------- */
+.deepdive { background: var(--bg-soft); }
+.deepdive__rows { display: flex; flex-direction: column; gap: clamp(48px, 7vw, 88px); }
+.deepdive__row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+.deepdive__row.is-reversed .deepdive__media { order: 2; }
+.deepdive__media {
+  border-radius: var(--radius-lg); padding: clamp(24px, 4vw, 44px);
+  background: linear-gradient(160deg, #0b1211, #0e241b);
+  display: grid; place-items: center; box-shadow: var(--shadow-md);
+}
+.deepdive__media .browser { max-width: 460px; }
+.deepdive__media .phone { max-width: 232px; }
+.deepdive__title { font-size: clamp(24px, 3vw, 32px); font-weight: 800; margin-top: 12px; }
+.deepdive__body { margin-top: 14px; font-size: 16px; color: var(--text-2); max-width: 460px; }
+.deepdive__functions { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
+.deepdive__functions li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; font-weight: 500; color: var(--text); }
+.deepdive__tick { width: 24px; height: 24px; border-radius: 8px; background: var(--green-050); color: var(--green-700); border: 1px solid #d7ece0; display: grid; place-items: center; flex: none; margin-top: 1px; }
+.deepdive__cta { margin-top: 26px; }
 
 /* ---------------- CASE STUDY ---------------- */
 .casestudy { background: linear-gradient(180deg, #0b1211, #0a1a14); }
@@ -283,6 +306,9 @@ fieldset.field { border: none; padding: 0; margin: 0; }
   .compare { grid-template-columns: 1fr; }
   .projects-grid { grid-template-columns: 1fr; }
   .journey__preview { display: none; }
+  .deepdive__row, .deepdive__row.is-reversed { grid-template-columns: 1fr; }
+  .deepdive__row .deepdive__media, .deepdive__row.is-reversed .deepdive__media { order: -1; }
+  .deepdive__media { max-width: 520px; margin: 0 auto; width: 100%; }
 }
 
 @media (max-width: 640px) {

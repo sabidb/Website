@@ -1,4 +1,5 @@
 import React from 'react';
+import { Check } from 'lucide-react';
 import { solutions } from '../site.config';
 import { Icon } from './ui/Icon';
 import { Reveal } from './ui/Reveal';
@@ -16,10 +17,15 @@ export const WhatWeBuild: React.FC = () => (
       </div>
       <div className="solutions-grid">
         {solutions.map((s, i) => (
-          <Reveal key={s.title} className="card" delay={(i % 4) * 60}>
+          <Reveal key={s.title} className="card solution-card" delay={(i % 3) * 70}>
             <div className="card__icon"><Icon name={s.icon} size={22} /></div>
             <h3>{s.title}</h3>
             <p>{s.body}</p>
+            <ul className="solution-card__points">
+              {s.points.map((p) => (
+                <li key={p}><Check size={14} /> {p}</li>
+              ))}
+            </ul>
           </Reveal>
         ))}
       </div>
