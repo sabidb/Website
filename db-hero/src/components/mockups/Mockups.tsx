@@ -51,9 +51,9 @@ const MenuScreen = () => (
 const ProductScreen = () => (
   <div className="scr">
     <div className="hero-img" />
-    <div style={{ padding: '12px 16px 4px' }}>
-      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 15 }}>Signature Burger</div>
-      <div style={{ color: 'var(--text-3)', fontSize: 10, marginTop: 2 }}>Choose your options</div>
+    <div style={{ padding: '1.2em 1.6em 0.4em' }}>
+      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.5em' }}>Signature Burger</div>
+      <div style={{ color: 'var(--text-3)', fontSize: '1em', marginTop: '0.2em' }}>Choose your options</div>
     </div>
     <div className="opt-row"><span>Single patty</span><span className="r on" /></div>
     <div className="opt-row"><span>Double patty · +12 SAR</span><span className="r" /></div>
@@ -61,10 +61,10 @@ const ProductScreen = () => (
     <div className="opt-row"><span>Spicy sauce</span><span className="r" /></div>
     <div className="sheet">
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 9, color: 'var(--text-3)' }}>Total</div>
-        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--green-700)', fontSize: 15 }}>36 SAR</div>
+        <div style={{ fontSize: '0.9em', color: 'var(--text-3)' }}>Total</div>
+        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--green-700)', fontSize: '1.5em' }}>36 SAR</div>
       </div>
-      <div className="plus" style={{ width: 'auto', padding: '10px 18px', borderRadius: 999, fontSize: 11, fontWeight: 700 }}>Add to cart</div>
+      <div className="plus" style={{ width: 'auto', padding: '1em 1.8em', borderRadius: 999, fontSize: '1.1em', fontWeight: 700 }}>Add to cart</div>
     </div>
   </div>
 );
@@ -78,16 +78,16 @@ const CheckoutScreen = () => (
     <div className="srow"><span>Delivery</span><span>10 SAR</span></div>
     <div className="srow"><span>VAT (15%)</span><span>10.05 SAR</span></div>
     <div className="srow total"><span>Total</span><span>77.05 SAR</span></div>
-    <div style={{ padding: '10px 16px 2px', fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-display)' }}>Payment</div>
-    <div className="paycard"><div className="brandmark" /><div style={{ fontSize: 10, fontWeight: 700 }}>Card •••• 4242</div><div style={{ marginLeft: 'auto', color: 'var(--green-700)', fontSize: 10, fontWeight: 700 }}>Selected</div></div>
-    <div className="sheet"><div className="plus" style={{ width: '100%', borderRadius: 12, padding: '12px', fontSize: 12, fontWeight: 700 }}>Place order · 77.05 SAR</div></div>
+    <div style={{ padding: '1em 1.6em 0.2em', fontSize: '1em', fontWeight: 700, fontFamily: 'var(--font-display)' }}>Payment</div>
+    <div className="paycard"><div className="brandmark" /><div style={{ fontSize: '1em', fontWeight: 700 }}>Card •••• 4242</div><div style={{ marginLeft: 'auto', color: 'var(--green-700)', fontSize: '1em', fontWeight: 700 }}>Selected</div></div>
+    <div className="sheet"><div className="plus" style={{ width: '100%', borderRadius: '1.2em', padding: '1.2em', fontSize: '1.2em', fontWeight: 700 }}>Place order · 77.05 SAR</div></div>
   </div>
 );
 
 const TrackingScreen = () => (
   <div className="scr">
     <StatusBar />
-    <div className="appbar"><div className="place">Order #10482</div><div style={{ fontSize: 10, color: 'var(--green-700)', fontWeight: 700 }}>On the way</div></div>
+    <div className="appbar"><div className="place">Order #10482</div><div style={{ fontSize: '1em', color: 'var(--green-700)', fontWeight: 700 }}>On the way</div></div>
     <div className="map"><div className="road" /><div className="pin" /></div>
     <div className="track">
       <div className="tstep done"><div className="node" /><div><b>Order confirmed</b><small>9:41 AM</small></div></div>
@@ -105,7 +105,7 @@ const AdminScreen = () => (
         <div className="logo" /><i className="on" /><i /><i /><i /><i />
       </div>
       <div className="adm__main">
-        <div className="adm__top"><b>Dashboard</b><span style={{ fontSize: 9, color: 'var(--text-3)' }}>All branches ▾</span></div>
+        <div className="adm__top"><b>Dashboard</b><span style={{ fontSize: '0.9em', color: 'var(--text-3)' }}>All branches ▾</span></div>
         <div className="kpis">
           <div className="kpi"><small>Orders today</small><b>248</b><span className="up">▲ live</span></div>
           <div className="kpi"><small>Revenue</small><b>18.4k</b><span className="up">SAR</span></div>
@@ -153,7 +153,7 @@ const KitchenScreen = () => (
 const DeliveryScreen = () => (
   <div className="scr">
     <div className="dboard">
-      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 13 }}>Delivery board · 4 active</div>
+      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.3em' }}>Delivery board · 4 active</div>
       <div>
         {[
           { d: 'Omar A.', o: '#10482', z: 'Al Olaya', s: 'On the way', g: true },
@@ -175,15 +175,15 @@ const DeliveryScreen = () => (
 const ReportsScreen = () => (
   <div className="scr">
     <div className="rep">
-      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 13, marginBottom: 12 }}>Sales reports</div>
-      <div className="panel" style={{ marginBottom: 10 }}>
+      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.3em', marginBottom: '1.2em' }}>Sales reports</div>
+      <div className="panel" style={{ marginBottom: '1em' }}>
         <h5>Revenue trend · last 7 days</h5>
         <div className="line-chart" />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-        <div className="panel" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1em' }}>
+        <div className="panel" style={{ display: 'flex', gap: '1.2em', alignItems: 'center' }}>
           <div className="donut" />
-          <div style={{ fontSize: 9 }}>
+          <div style={{ fontSize: '0.9em' }}>
             <div style={{ color: 'var(--green-700)', fontWeight: 700 }}>■ Dine-in 45%</div>
             <div style={{ color: 'var(--green-500)', fontWeight: 700 }}>■ Delivery 25%</div>
             <div style={{ color: 'var(--gold)', fontWeight: 700 }}>■ Pickup 18%</div>

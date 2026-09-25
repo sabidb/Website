@@ -42,7 +42,6 @@ export const CaseStudy: React.FC = () => {
           <Reveal className="casestudy__visual" delay={120}>
             <div className="cs-browser"><BrowserMock screen="admin" /></div>
             <div className="cs-phone cs-phone--1"><PhoneMock screen="menu" /></div>
-            <div className="cs-phone cs-phone--2"><PhoneMock screen="tracking" /></div>
           </Reveal>
         </div>
 
