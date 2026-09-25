@@ -287,3 +287,43 @@ export const techAreas = [
 ];
 
 export const branches = ['Branch 01', 'Branch 02', 'Branch 03', 'Branch 04', 'Future Branches'];
+
+/** Restaurant segments we build for — credibility without naming clients. */
+export const segments = [
+  { icon: 'Utensils', title: 'Quick-service & fast food', body: 'High-volume ordering with fast POS and kitchen flow.' },
+  { icon: 'Coffee', title: 'Cafés & bakeries', body: 'Menu-rich ordering with customization and loyalty in mind.' },
+  { icon: 'ChefHat', title: 'Fine & casual dining', body: 'Table-side ordering, dine-in POS and branded apps.' },
+  { icon: 'Boxes', title: 'Cloud & ghost kitchens', body: 'Delivery-first operations across multiple brands.' },
+  { icon: 'Building2', title: 'Multi-branch chains', body: 'Central control with branch-level operations.' },
+  { icon: 'Network', title: 'Franchises & groups', body: 'Consistent systems across every location you run.' },
+];
+
+/** Engagement / delivery process — shows we work as a partner. */
+export const process = [
+  { n: '01', title: 'Discovery', body: 'We learn your menu, branches, workflows and goals — then agree a clear scope.' },
+  { n: '02', title: 'Design', body: 'We map the customer journey, POS and admin screens around how you operate.' },
+  { n: '03', title: 'Build', body: 'We develop your app, POS and dashboard as one connected system.' },
+  { n: '04', title: 'Launch', body: 'We roll out across your branches and get your team confident on it.' },
+  { n: '05', title: 'Support & Scale', body: 'We maintain the platform and keep building as you add branches and features.' },
+];
+
+/** "Built to grow with you" — factual architecture principles, not certifications. */
+export const reliability = [
+  { icon: 'ShieldCheck', title: 'You own your data & customers', body: 'Your platform and your customer relationships — not a marketplace’s.' },
+  { icon: 'Cloud', title: 'Cloud-hosted & scalable', body: 'Runs in the cloud and scales as you add branches, orders and channels.' },
+  { icon: 'Lock', title: 'Secure by design', body: 'Access control, secure payment flows and careful data handling.' },
+  { icon: 'Languages', title: 'Arabic & English', body: 'Built for the Saudi market with right-to-left support in mind.' },
+  { icon: 'ReceiptText', title: 'VAT-ready', body: 'Correct tax handling and clean, compliant receipts.' },
+  { icon: 'Workflow', title: 'One system, every channel', body: 'App, POS, kitchen and delivery all stay in sync.' },
+];
+
+/** FAQ — answers a serious buyer's real objections. */
+export const faq = [
+  { q: 'Do we own our data and customers?', a: 'Yes. It’s your platform — your menu, your customers and your data — not a marketplace that sits between you and your guests.' },
+  { q: 'Can it handle multiple branches?', a: 'Yes. Each branch runs its own operations while ownership stays central, and the system scales as you add locations.' },
+  { q: 'How do payments work?', a: 'We build checkout around the payment provider you choose, with automatic VAT calculation and clean receipts.' },
+  { q: 'Is it available in Arabic?', a: 'We build for the Saudi market and can deliver the customer experience in Arabic and English, with right-to-left layouts.' },
+  { q: 'Can you integrate our existing systems?', a: 'Where possible, yes — we build around the payment providers, hardware and tools your restaurant already relies on.' },
+  { q: 'How long does it take?', a: 'It depends on scope. We define this together in the discovery phase and give you a clear plan and timeline before we build.' },
+  { q: 'Do you provide support after launch?', a: 'Yes. We maintain the system after launch and continue to build with you as your business grows.' },
+];

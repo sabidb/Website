@@ -39,6 +39,49 @@
 .hero__float--a { top: 20px; left: 0; }
 .hero__float--b { bottom: 40px; right: -6px; }
 
+/* ---------------- SCROLL PROGRESS ---------------- */
+.scrollprogress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 200; pointer-events: none; }
+.scrollprogress span { display: block; height: 100%; transform-origin: left center; transform: scaleX(0); background: linear-gradient(90deg, var(--green-600), var(--gold)); box-shadow: 0 0 8px rgba(18,160,106,.5); }
+
+/* ---------------- SEGMENTS (who we build for) ---------------- */
+.segments__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.segment { display: flex; gap: 14px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+.segment:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+.segment__icon { width: 44px; height: 44px; border-radius: 12px; flex: none; display: grid; place-items: center; background: linear-gradient(140deg, var(--green-050), #fff); border: 1px solid #d7ece0; color: var(--green-700); }
+.segment h3 { font-size: 15.5px; margin-bottom: 5px; }
+.segment p { font-size: 13.5px; color: var(--text-2); }
+
+/* ---------------- PROCESS (how we work) ---------------- */
+.process { background: linear-gradient(180deg, #0b1211, #0a1a14); }
+.process__track { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; position: relative; list-style: none; margin: 0; padding: 0; }
+.process__track::before { content: ''; position: absolute; top: 26px; left: 8%; right: 8%; height: 2px; background: linear-gradient(90deg, rgba(28,184,125,.15), rgba(28,184,125,.5), rgba(226,178,76,.4)); }
+.process__step { position: relative; text-align: center; padding: 0 6px; }
+.process__num { width: 54px; height: 54px; border-radius: 50%; margin: 0 auto 16px; display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; font-size: 18px; color: #fff; background: linear-gradient(150deg, var(--green-600), var(--green-900)); border: 3px solid #0b1211; box-shadow: 0 0 0 1px rgba(28,184,125,.35); position: relative; z-index: 1; }
+.process__step:last-child .process__num { background: linear-gradient(150deg, var(--gold), #b7862c); }
+.process__step h3 { color: #fff; font-size: 16px; margin-bottom: 8px; }
+.process__step p { color: var(--on-dark-2); font-size: 13.5px; }
+
+/* ---------------- RELIABILITY ---------------- */
+.reliability { background: var(--bg-mint); }
+.reliability__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.reliability__card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; transition: transform .22s ease, box-shadow .22s ease; }
+.reliability__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.reliability__icon { width: 48px; height: 48px; border-radius: 13px; display: grid; place-items: center; background: linear-gradient(140deg, var(--green-700), var(--green-900)); color: #fff; margin-bottom: 16px; }
+.reliability__card h3 { font-size: 17px; margin-bottom: 8px; }
+.reliability__card p { font-size: 14px; color: var(--text-2); }
+
+/* ---------------- FAQ ---------------- */
+.faq__list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.faq__item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .2s ease, box-shadow .2s ease; }
+.faq__item.is-open { border-color: var(--green-600); box-shadow: 0 10px 30px -18px rgba(14,124,79,.5); }
+.faq__q { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; text-align: left; background: transparent; border: none; padding: 20px 22px; font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--text); }
+.faq__ic { width: 32px; height: 32px; border-radius: 9px; flex: none; display: grid; place-items: center; background: var(--bg-mint); color: var(--green-700); border: 1px solid #d7ece0; transition: background .2s ease; }
+.faq__item.is-open .faq__ic { background: var(--green-700); color: #fff; border-color: var(--green-700); }
+.faq__a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+.faq__a > div { overflow: hidden; }
+.faq__a p { padding: 0 22px 20px; color: var(--text-2); font-size: 15px; max-width: 680px; }
+.faq__cta { text-align: center; margin-top: 30px; }
+
 /* ---------------- CAPABILITY STRIP ---------------- */
 .capstrip { border-bottom: 1px solid var(--border); background: var(--bg-soft); }
 .capstrip__inner { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 26px; padding: 22px 24px; }
@@ -293,7 +336,8 @@ fieldset.field { border: none; padding: 0; margin: 0; }
   .solutions-grid { grid-template-columns: repeat(2, 1fr); }
   .tech-grid { grid-template-columns: repeat(2, 1fr); }
   .casestudy__cols { grid-template-columns: repeat(2, 1fr); }
-  .capstrip__inner { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .segments__grid { grid-template-columns: repeat(2, 1fr); }
+  .reliability__grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 900px) {
@@ -309,6 +353,14 @@ fieldset.field { border: none; padding: 0; margin: 0; }
   .deepdive__row, .deepdive__row.is-reversed { grid-template-columns: 1fr; }
   .deepdive__row .deepdive__media, .deepdive__row.is-reversed .deepdive__media { order: -1; }
   .deepdive__media { max-width: 520px; margin: 0 auto; width: 100%; }
+
+  /* Process → vertical timeline */
+  .process__track { grid-template-columns: 1fr; gap: 0; max-width: 460px; margin: 0 auto; }
+  .process__track::before { top: 0; bottom: 0; left: 26px; right: auto; width: 2px; height: auto; }
+  .process__step { text-align: left; display: grid; grid-template-columns: 54px 1fr; gap: 0 18px; padding: 0 0 28px; }
+  .process__num { margin: 0; grid-row: span 2; }
+  .process__step h3 { align-self: center; }
+  .process__step:last-child { padding-bottom: 0; }
 }
 
 @media (max-width: 640px) {
@@ -324,6 +376,8 @@ fieldset.field { border: none; padding: 0; margin: 0; }
   .checklist { grid-template-columns: 1fr; }
   .ownerdash__controls { grid-template-columns: 1fr; }
   .about__pillars { grid-template-columns: 1fr; }
+  .segments__grid { grid-template-columns: 1fr; }
+  .reliability__grid { grid-template-columns: 1fr; }
   .field-row { grid-template-columns: 1fr; }
   .hero__visual { height: 380px; max-width: 380px; margin-left: auto; margin-right: auto; }
   .hero__phone--1 { width: 150px; }
